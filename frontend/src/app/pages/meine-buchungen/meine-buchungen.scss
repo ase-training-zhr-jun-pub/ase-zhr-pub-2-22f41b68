@@ -1,0 +1,42 @@
+:host { display: block; }
+
+.section-title { margin: 0 0 1rem; font-size: 1.25rem; }
+.section-title--past { margin-top: 2.5rem; color: var(--clv-gray-600); }
+
+.buchungen { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
+
+.buchung {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.1rem 1.4rem;
+}
+.buchung--past { opacity: 0.72; }
+
+.buchung__date {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--clv-radius);
+  background: var(--clv-petrol-050);
+  border: 1px solid var(--clv-petrol-050);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--clv-petrol);
+}
+.buchung__day { font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.buchung__month { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+
+.buchung__body h3 { margin: 0 0 0.3rem; }
+.buchung__meta { margin: 0 0 0.2rem; color: var(--clv-gray-700); font-size: 0.92rem; }
+.buchung__when { margin: 0; color: var(--clv-gray-600); font-size: 0.9rem; }
+.buchung__note { margin: 0.25rem 0 0; color: var(--clv-gray-500); font-size: 0.85rem; font-style: italic; }
+
+.buchung__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem; }
+
+@media (max-width: 720px) {
+  .buchung { grid-template-columns: 56px 1fr; }
+  .buchung__actions { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+}

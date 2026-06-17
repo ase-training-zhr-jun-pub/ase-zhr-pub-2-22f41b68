@@ -1,0 +1,27 @@
+:host { display: block; }
+
+.standort__top {
+  height: 84px;
+  background: var(--clv-petrol);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.4rem;
+}
+.standort__kuerzel {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--clv-white);
+  letter-spacing: -0.02em;
+}
+.standort__top .clv-badge { background: var(--clv-apricot); color: var(--clv-petrol-900); }
+
+.standort h3 { margin-bottom: 0.15rem; }
+.standort__land { color: var(--clv-apricot); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.standort__adresse { color: var(--clv-gray-600); font-size: 0.9rem; margin-bottom: 1rem; }
+.standort__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.standort__cta { color: var(--clv-petrol); font-weight: 700; font-size: 0.9rem; }

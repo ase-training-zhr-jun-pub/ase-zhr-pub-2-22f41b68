@@ -1,0 +1,30 @@
+<div class="clv-shell">
+  <header class="clv-page-head">
+    <p class="eyebrow">Multi-Standort</p>
+    <h1>Standorte</h1>
+    <p class="lead">
+      INNOQ ist an acht Standorten in Deutschland und der Schweiz vertreten.
+      Wähle einen Standort, um die dort verfügbaren Konferenzräume zu finden.
+    </p>
+  </header>
+
+  <div class="clv-grid clv-grid--cards">
+    @for (s of standorte; track s.id) {
+      <a class="clv-card clv-card--link standort" [routerLink]="['/raeume-finden']" [queryParams]="{ standort: s.id }">
+        <div class="standort__top">
+          <span class="standort__kuerzel">{{ s.kuerzel }}</span>
+          @if (s.hauptsitz) { <span class="clv-badge clv-badge--accent">Hauptsitz</span> }
+        </div>
+        <div class="clv-card__body">
+          <h3>{{ s.name }}</h3>
+          <p class="standort__land">{{ s.land }}</p>
+          <p class="standort__adresse">{{ s.adresse }}</p>
+          <div class="standort__foot">
+            <span class="clv-chip">🚪 {{ anzahlRaeume(s.id) }} Räume</span>
+            <span class="standort__cta">Räume finden →</span>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</div>
