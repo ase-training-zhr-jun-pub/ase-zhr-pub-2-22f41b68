@@ -1,0 +1,90 @@
+:host { display: block; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ---- Filter ---------------------------------------------------------- */
+.filters {
+  position: sticky;
+  top: 92px;
+  background: var(--clv-white);
+  border: 1px solid var(--clv-gray-300);
+  border-radius: var(--clv-radius-lg);
+  box-shadow: var(--clv-shadow-sm);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.filter-block { display: flex; flex-direction: column; gap: 0.55rem; }
+.time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.time-cap { font-size: 0.78rem; color: var(--clv-gray-600); }
+.filter-hint { color: var(--clv-red); font-size: 0.8rem; margin: 0.25rem 0 0; }
+
+.ausstattung-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ausstattung-toggle {
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 100px;
+  border: 1px solid var(--clv-gray-300);
+  background: var(--clv-white);
+  color: var(--clv-gray-700);
+  cursor: pointer;
+  transition: all 0.13s ease;
+}
+.ausstattung-toggle:hover { border-color: var(--clv-petrol); }
+.ausstattung-toggle.is-on {
+  background: var(--clv-petrol);
+  border-color: var(--clv-petrol);
+  color: var(--clv-white);
+}
+.filter-reset { align-self: flex-start; }
+
+/* ---- Ergebnisse ------------------------------------------------------ */
+.results__head { margin-bottom: 1.25rem; }
+.results__head h2 { margin-bottom: 0.2rem; }
+.results__sub { color: var(--clv-gray-600); font-size: 0.95rem; margin: 0; }
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+.room__banner {
+  height: 92px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.room__cap {
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 100px;
+}
+.room h3 { margin-bottom: 0.2rem; }
+.room__lage { color: var(--clv-gray-600); font-size: 0.88rem; margin-bottom: 0.75rem; }
+.room__features { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0; margin: 0 0 1rem; }
+.room__features .clv-chip { padding: 0.25rem 0.45rem; font-size: 0.95rem; }
+.room__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--clv-gray-200);
+  padding-top: 0.75rem;
+}
+.room__bookings { color: var(--clv-gray-500); font-size: 0.8rem; }
+.room__cta { color: var(--clv-petrol); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+
+@media (max-width: 880px) {
+  .layout { grid-template-columns: 1fr; }
+  .filters { position: static; }
+}

@@ -1,0 +1,84 @@
+<section class="hero">
+  <div class="hero__inner clv-shell">
+    <div class="hero__text">
+      <p class="eyebrow">INNOQ Raumbuchung</p>
+      <h1>Mühelos den passenden Raum finden und buchen&nbsp;– an jedem INNOQ-Standort.</h1>
+      <p class="hero__lead">
+        Calvin gibt dir die Sicherheit, dass dein Konferenzraum wirklich verfügbar ist –
+        ob für den Kundenworkshop, das Team-Meeting oder die spontane Besprechung.
+      </p>
+      <div class="hero__actions">
+        <a routerLink="/raeume-finden" class="clv-btn clv-btn--accent">Räume finden</a>
+        <a routerLink="/standorte" class="clv-btn clv-btn--ghost hero__ghost">Standorte ansehen</a>
+      </div>
+    </div>
+
+    @if (naechsteBuchung(); as b) {
+      <aside class="hero__card">
+        <p class="hero__card-label">Deine nächste Buchung</p>
+        <strong class="hero__card-title">{{ b.titel }}</strong>
+        <ul class="hero__card-meta">
+          <li>📍 {{ raumName(b.raumId) }} · {{ standortName(b.standortId) }}</li>
+          <li>📅 {{ formatDatum(b.datum) }}</li>
+          <li>🕒 {{ b.startzeit }}–{{ b.endzeit }} Uhr</li>
+        </ul>
+        <a routerLink="/meine-buchungen" class="hero__card-link">Alle meine Buchungen →</a>
+      </aside>
+    }
+  </div>
+</section>
+
+<div class="clv-shell">
+  <section class="stats">
+    <div class="stat">
+      <span class="stat__num">{{ anzahlStandorte }}</span>
+      <span class="stat__label">Standorte</span>
+    </div>
+    <div class="stat">
+      <span class="stat__num">{{ anzahlRaeume }}</span>
+      <span class="stat__label">Konferenzräume</span>
+    </div>
+    <div class="stat">
+      <span class="stat__num">{{ booking.anzahlMeineBuchungen() }}</span>
+      <span class="stat__label">Meine Buchungen</span>
+    </div>
+    <div class="stat">
+      <span class="stat__num">0</span>
+      <span class="stat__label">Doppelbuchungen</span>
+    </div>
+  </section>
+
+  <section class="entry">
+    <h2>Was möchtest du tun?</h2>
+    <div class="clv-grid clv-grid--cards">
+      <a routerLink="/raeume-finden" class="clv-card clv-card--link feature">
+        <div class="clv-card__body">
+          <span class="feature__icon">🔍</span>
+          <h3>Räume finden</h3>
+          <p>Standort wählen, nach Kapazität und Ausstattung filtern und den passenden Konferenzraum finden.</p>
+        </div>
+      </a>
+      <a routerLink="/standorte" class="clv-card clv-card--link feature">
+        <div class="clv-card__body">
+          <span class="feature__icon">🏢</span>
+          <h3>Standorte</h3>
+          <p>Alle acht INNOQ-Standorte in Deutschland und der Schweiz auf einen Blick.</p>
+        </div>
+      </a>
+      <a routerLink="/meine-buchungen" class="clv-card clv-card--link feature">
+        <div class="clv-card__body">
+          <span class="feature__icon">📅</span>
+          <h3>Meine Buchungen</h3>
+          <p>Behalte den Überblick über deine reservierten Konferenzräume und storniere bei Bedarf.</p>
+        </div>
+      </a>
+      <a routerLink="/arbeitsplaetze" class="clv-card clv-card--link feature feature--soon">
+        <div class="clv-card__body">
+          <span class="feature__icon">🪑</span>
+          <h3>Arbeitsplätze <span class="clv-badge clv-badge--accent">Bald</span></h3>
+          <p>Die Buchung einzelner Arbeitsplätze ist für eine spätere Phase geplant.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</div>

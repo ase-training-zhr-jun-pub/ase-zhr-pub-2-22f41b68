@@ -1,0 +1,47 @@
+<header class="clv-header">
+  <div class="clv-header__inner">
+    <a routerLink="/" class="clv-brand" aria-label="Calvin Startseite">
+      <span class="clv-brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="30" height="30">
+          <rect width="32" height="32" rx="6" fill="#004153" />
+          <path d="M22 11.5a7 7 0 1 0 0 9" fill="none" stroke="#ff9c66" stroke-width="3" stroke-linecap="round" />
+        </svg>
+      </span>
+      <span class="clv-brand__text">
+        <strong>Calvin</strong>
+        <small>by INNOQ</small>
+      </span>
+    </a>
+
+    <nav class="clv-nav" aria-label="Hauptnavigation">
+      <a routerLink="/raeume-finden" routerLinkActive="is-active">Räume finden</a>
+      <a routerLink="/standorte" routerLinkActive="is-active">Standorte</a>
+      <a routerLink="/meine-buchungen" routerLinkActive="is-active">
+        Meine Buchungen
+        @if (booking.anzahlMeineBuchungen() > 0) {
+          <span class="clv-nav__count">{{ booking.anzahlMeineBuchungen() }}</span>
+        }
+      </a>
+      <a routerLink="/arbeitsplaetze" routerLinkActive="is-active">Arbeitsplätze</a>
+    </nav>
+
+    <div class="clv-user" title="Angemeldeter INNOQ-Mitarbeiter">
+      <span class="clv-user__avatar">{{ mitarbeiter.initialen }}</span>
+      <span class="clv-user__meta">
+        <strong>{{ mitarbeiter.name }}</strong>
+        <small>{{ mitarbeiter.rolle }}</small>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main class="clv-main">
+  <router-outlet />
+</main>
+
+<footer class="clv-footer">
+  <div class="clv-footer__inner">
+    <span>Calvin · Internes Raumbuchungssystem von INNOQ</span>
+    <span class="clv-footer__note">Prototyp · Mock-Daten · ohne Backend</span>
+  </div>
+</footer>

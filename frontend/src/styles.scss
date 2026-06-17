@@ -1,0 +1,267 @@
+/* =========================================================================
+   Calvin – globales Stylesheet
+   INNOQ Corporate Identity (abgeleitet von innoq.com):
+     Primär  Petrol   #004153
+     Akzent  Apricot  #ff9c66
+     Tinte    #242424, Grautöne, Signalfarben
+     Schrift: geometrische Sans (FF Mark) → Helvetica-Neue-Stack
+   ========================================================================= */
+
+:root {
+  /* Markenfarben */
+  --clv-petrol: #004153;
+  --clv-petrol-700: #005268;
+  --clv-petrol-900: #00303d;
+  --clv-petrol-050: #e6eef0;
+  --clv-apricot: #ff9c66;
+  --clv-apricot-300: #ffcdb2;
+  --clv-apricot-100: #ffe6d9;
+
+  /* Neutrale Töne */
+  --clv-ink: #242424;
+  --clv-gray-700: #4a4a4b;
+  --clv-gray-600: #646465;
+  --clv-gray-500: #979798;
+  --clv-gray-300: #d8d8d8;
+  --clv-gray-200: #ececec;
+  --clv-gray-100: #f7f7f7;
+  --clv-white: #ffffff;
+
+  /* Signalfarben */
+  --clv-green: #009999;
+  --clv-yellow: #fff019;
+  --clv-red: #d01040;
+  --clv-pink: #ff4d67;
+
+  /* Semantik */
+  --clv-frei: #009999;
+  --clv-belegt: #d01040;
+
+  /* Maße */
+  --clv-radius: 6px;
+  --clv-radius-lg: 12px;
+  --clv-shell-max: 1200px;
+  --clv-shadow-sm: 0 1px 2px rgba(36, 36, 36, 0.06), 0 1px 3px rgba(36, 36, 36, 0.08);
+  --clv-shadow-md: 0 4px 14px rgba(0, 65, 83, 0.10);
+
+  /* Typografie */
+  --clv-font-sans: 'FFMarkWebPro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --clv-font-serif: 'FreightTextPro', Georgia, 'Times New Roman', serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--clv-font-sans);
+  color: var(--clv-ink);
+  background: var(--clv-gray-100);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--clv-font-sans);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--clv-ink);
+  margin: 0 0 0.5em;
+}
+
+h1 { font-size: 2.4rem; }
+h2 { font-size: 1.7rem; }
+h3 { font-size: 1.25rem; }
+
+p { margin: 0 0 1rem; }
+
+a {
+  color: var(--clv-petrol);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/* ---- Layout-Hilfen --------------------------------------------------- */
+.clv-shell {
+  max-width: var(--clv-shell-max);
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.clv-page-head {
+  margin-bottom: 2rem;
+}
+.clv-page-head .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--clv-apricot);
+  margin-bottom: 0.5rem;
+}
+.clv-page-head p.lead {
+  color: var(--clv-gray-600);
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+
+.clv-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+.clv-grid--cards {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ---- Card ------------------------------------------------------------ */
+.clv-card {
+  background: var(--clv-white);
+  border: 1px solid var(--clv-gray-300);
+  border-radius: var(--clv-radius-lg);
+  box-shadow: var(--clv-shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+a.clv-card,
+.clv-card--link {
+  cursor: pointer;
+  display: block;
+  color: inherit;
+}
+a.clv-card:hover,
+.clv-card--link:hover {
+  text-decoration: none;
+  box-shadow: var(--clv-shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--clv-petrol);
+}
+.clv-card__body { padding: 1.25rem 1.4rem; }
+
+/* ---- Buttons --------------------------------------------------------- */
+.clv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.7rem 1.3rem;
+  border-radius: var(--clv-radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+.clv-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.clv-btn--primary {
+  background: var(--clv-petrol);
+  color: var(--clv-white);
+  border-color: var(--clv-petrol);
+}
+.clv-btn--primary:hover:not(:disabled) { background: var(--clv-petrol-900); border-color: var(--clv-petrol-900); text-decoration: none; }
+
+.clv-btn--accent {
+  background: var(--clv-apricot);
+  color: var(--clv-ink);
+  border-color: var(--clv-apricot);
+}
+.clv-btn--accent:hover:not(:disabled) { background: var(--clv-apricot-300); border-color: var(--clv-apricot-300); text-decoration: none; }
+
+.clv-btn--ghost {
+  background: transparent;
+  color: var(--clv-petrol);
+  border-color: var(--clv-gray-300);
+}
+.clv-btn--ghost:hover:not(:disabled) { border-color: var(--clv-petrol); background: var(--clv-petrol-050); text-decoration: none; }
+
+.clv-btn--sm { padding: 0.45rem 0.85rem; font-size: 0.85rem; }
+
+/* ---- Badges / Chips -------------------------------------------------- */
+.clv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.clv-badge--frei { background: rgba(0, 153, 153, 0.12); color: var(--clv-green); }
+.clv-badge--belegt { background: rgba(208, 16, 64, 0.10); color: var(--clv-red); }
+.clv-badge--neutral { background: var(--clv-gray-200); color: var(--clv-gray-700); }
+.clv-badge--accent { background: var(--clv-apricot-100); color: #b5571f; }
+
+.clv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 100px;
+  background: var(--clv-gray-100);
+  border: 1px solid var(--clv-gray-300);
+  color: var(--clv-gray-700);
+}
+
+/* ---- Formularelemente ------------------------------------------------ */
+.clv-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.clv-label { font-size: 0.85rem; font-weight: 700; color: var(--clv-gray-700); }
+.clv-input,
+.clv-select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--clv-gray-300);
+  border-radius: var(--clv-radius);
+  background: var(--clv-white);
+  color: var(--clv-ink);
+}
+.clv-input:focus,
+.clv-select:focus {
+  outline: none;
+  border-color: var(--clv-petrol);
+  box-shadow: 0 0 0 3px rgba(0, 65, 83, 0.12);
+}
+
+/* ---- Hinweis-/Leerzustände ------------------------------------------ */
+.clv-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--clv-white);
+  border: 1px dashed var(--clv-gray-300);
+  border-radius: var(--clv-radius-lg);
+  color: var(--clv-gray-600);
+}
+.clv-empty .icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+.clv-notice {
+  border-radius: var(--clv-radius);
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  border-left: 4px solid;
+}
+.clv-notice--success { background: rgba(0, 153, 153, 0.08); border-color: var(--clv-green); color: #066; }
+.clv-notice--error { background: rgba(208, 16, 64, 0.07); border-color: var(--clv-red); color: #8a0d2c; }
+.clv-notice--info { background: var(--clv-petrol-050); border-color: var(--clv-petrol); color: var(--clv-petrol-900); }
+
+/* ---- Visually hidden ------------------------------------------------- */
+.clv-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
