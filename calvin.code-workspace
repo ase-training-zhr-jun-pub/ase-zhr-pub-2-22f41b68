@@ -1,0 +1,34 @@
+{
+  "folders": [
+    { "name": "root", "path": "." },
+    { "name": "backend", "path": "backend" },
+    { "name": "frontend", "path": "frontend" }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "maven.executable.path": "${workspaceFolder:backend}/mvnw",
+    "maven.terminal.useJavaHome": true,
+    "testcontainers.ryuk.disabled": false,
+    "[java]": {
+      "editor.defaultFormatter": "redhat.java"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "redhat.java",
+      "vscjava.vscode-java-test",
+      "vscjava.vscode-maven",
+      "vscjava.vscode-spring-initializr",
+      "vmware.vscode-spring-boot",
+      "angular.ng-template",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

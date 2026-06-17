@@ -61,7 +61,8 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": ["students-6.students.training-03d8e8236d6c7a37.svc.cluster.local"]
+            "allowedHosts": ["students-6.students.training-03d8e8236d6c7a37.svc.cluster.local"],
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

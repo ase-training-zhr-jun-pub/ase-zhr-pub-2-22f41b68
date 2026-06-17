@@ -1,0 +1,8 @@
+{
+  "/api/v1": {
+    "target": "http://localhost:8080",
+    "pathRewrite": { "^/api/v1": "/api" },
+    "secure": false,
+    "changeOrigin": true
+  }
+}
