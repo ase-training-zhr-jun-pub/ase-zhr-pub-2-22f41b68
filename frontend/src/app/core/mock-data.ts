@@ -1,45 +1,45 @@
 /**
- * Mock-Daten für den Calvin-Prototyp.
+ * Mock data for the Calvin prototype.
  *
- * Es gibt (noch) kein Backend – sämtliche Daten zu allen im Glossar
- * definierten Entitäten werden hier statisch bereitgestellt.
+ * There is (as yet) no backend – all data for every entity defined
+ * in the glossary is provided here as static fixtures.
  */
-import { Ausstattung, Konferenzraum, Mitarbeiter, Raumbuchung, Standort } from './models';
+import { Equipment, ConferenceRoom, Employee, RoomBooking, Location } from './models';
 
-/** Die acht INNOQ-Standorte (Glossar: „Multi-Standort“). */
-export const STANDORTE: Standort[] = [
-  { id: 'mh', name: 'Monheim', stadt: 'Monheim am Rhein', land: 'Deutschland', kuerzel: 'MH', adresse: 'Krischerstraße 100, 40789 Monheim am Rhein', hauptsitz: true },
-  { id: 'be', name: 'Berlin', stadt: 'Berlin', land: 'Deutschland', kuerzel: 'BE', adresse: 'Ohlauer Straße 43, 10999 Berlin' },
-  { id: 'hh', name: 'Hamburg', stadt: 'Hamburg', land: 'Deutschland', kuerzel: 'HH', adresse: 'Ludwig-Erhard-Straße 18, 20459 Hamburg' },
-  { id: 'k', name: 'Köln', stadt: 'Köln', land: 'Deutschland', kuerzel: 'K', adresse: 'Im Mediapark 5, 50670 Köln' },
-  { id: 'm', name: 'München', stadt: 'München', land: 'Deutschland', kuerzel: 'M', adresse: 'Sonnenstraße 19, 80331 München' },
-  { id: 'zh', name: 'Zürich', stadt: 'Zürich', land: 'Schweiz', kuerzel: 'ZH', adresse: 'Förrlibuckstrasse 110, 8005 Zürich' },
-  { id: 'baar', name: 'Baar', stadt: 'Baar', land: 'Schweiz', kuerzel: 'BA', adresse: 'Lindenstrasse 16, 6340 Baar' },
-  { id: 'of', name: 'Offenbach', stadt: 'Offenbach am Main', land: 'Deutschland', kuerzel: 'OF', adresse: 'Kaiserstraße 39, 63065 Offenbach am Main' },
+/** The eight INNOQ office locations (Glossary: "Multi-Standort"). */
+export const LOCATIONS: Location[] = [
+  { id: 'mh', name: 'Monheim', city: 'Monheim am Rhein', country: 'Germany', abbreviation: 'MH', address: 'Krischerstraße 100, 40789 Monheim am Rhein', headquarters: true },
+  { id: 'be', name: 'Berlin', city: 'Berlin', country: 'Germany', abbreviation: 'BE', address: 'Ohlauer Straße 43, 10999 Berlin' },
+  { id: 'hh', name: 'Hamburg', city: 'Hamburg', country: 'Germany', abbreviation: 'HH', address: 'Ludwig-Erhard-Straße 18, 20459 Hamburg' },
+  { id: 'k', name: 'Köln', city: 'Köln', country: 'Germany', abbreviation: 'K', address: 'Im Mediapark 5, 50670 Köln' },
+  { id: 'm', name: 'München', city: 'München', country: 'Germany', abbreviation: 'M', address: 'Sonnenstraße 19, 80331 München' },
+  { id: 'zh', name: 'Zürich', city: 'Zürich', country: 'Switzerland', abbreviation: 'ZH', address: 'Förrlibuckstrasse 110, 8005 Zürich' },
+  { id: 'baar', name: 'Baar', city: 'Baar', country: 'Switzerland', abbreviation: 'BA', address: 'Lindenstrasse 16, 6340 Baar' },
+  { id: 'of', name: 'Offenbach', city: 'Offenbach am Main', country: 'Germany', abbreviation: 'OF', address: 'Kaiserstraße 39, 63065 Offenbach am Main' },
 ];
 
-/** Bekannte Ausstattungsmerkmale (Glossar: „Ausstattung“). */
-export const AUSSTATTUNGEN: Ausstattung[] = [
-  { id: 'bildschirm', name: 'Bildschirm', icon: '🖥️' },
-  { id: 'beamer', name: 'Beamer', icon: '📽️' },
+/** Known equipment features (Glossary: "Ausstattung"). */
+export const EQUIPMENT_ITEMS: Equipment[] = [
+  { id: 'bildschirm', name: 'Screen', icon: '🖥️' },
+  { id: 'beamer', name: 'Projector', icon: '📽️' },
   { id: 'whiteboard', name: 'Whiteboard', icon: '🧑‍🏫' },
   { id: 'flipchart', name: 'Flipchart', icon: '📋' },
-  { id: 'videokonferenz', name: 'Videokonferenz', icon: '📹' },
-  { id: 'telefonkonferenz', name: 'Telefonkonferenz', icon: '☎️' },
-  { id: 'klimaanlage', name: 'Klimaanlage', icon: '❄️' },
-  { id: 'hdmi', name: 'HDMI-Anschluss', icon: '🔌' },
-  { id: 'barrierefrei', name: 'Barrierefrei', icon: '♿' },
-  { id: 'kaffee', name: 'Kaffeemaschine', icon: '☕' },
+  { id: 'videokonferenz', name: 'Video conferencing', icon: '📹' },
+  { id: 'telefonkonferenz', name: 'Phone conferencing', icon: '☎️' },
+  { id: 'klimaanlage', name: 'Air conditioning', icon: '❄️' },
+  { id: 'hdmi', name: 'HDMI port', icon: '🔌' },
+  { id: 'barrierefrei', name: 'Accessible', icon: '♿' },
+  { id: 'kaffee', name: 'Coffee machine', icon: '☕' },
 ];
 
-/** Akzentfarben aus der INNOQ-Palette für die Raum-Kacheln. */
-const RAUM_FARBEN = ['#004153', '#ff9c66', '#009999', '#ff4d67', '#fff019', '#005268', '#68ddc3', '#d01040'];
+/** Accent colors from the INNOQ palette for room tiles. */
+const ROOM_COLORS = ['#004153', '#ff9c66', '#009999', '#ff4d67', '#fff019', '#005268', '#68ddc3', '#d01040'];
 
 /**
- * Raumnamen je Standort – Pioniere der Informatik, passend zur
- * Software-Beratung INNOQ.
+ * Room names per location – pioneers of computer science, fitting for
+ * the software consultancy INNOQ.
  */
-const RAUM_THEMEN: Record<string, string[]> = {
+const ROOM_THEMES: Record<string, string[]> = {
   mh: ['Turing', 'Lovelace', 'Hopper', 'Knuth', 'Dijkstra'],
   be: ['Neumann', 'Kay', 'Ritchie', 'Liskov'],
   hh: ['Torvalds', 'Wirth', 'Backus'],
@@ -51,80 +51,79 @@ const RAUM_THEMEN: Record<string, string[]> = {
 };
 
 /**
- * Generiert deterministische, aber abwechslungsreiche Konferenzräume
- * für alle Standorte.
+ * Generates deterministic but varied conference rooms for all locations.
  */
-function baueRaeume(): Konferenzraum[] {
-  const kapazitaeten = [4, 6, 8, 10, 12, 16, 20];
-  const ausstattungsPool = AUSSTATTUNGEN.map((a) => a.id);
-  const raeume: Konferenzraum[] = [];
-  let lfd = 0;
+function buildRooms(): ConferenceRoom[] {
+  const capacities = [4, 6, 8, 10, 12, 16, 20];
+  const equipmentPool = EQUIPMENT_ITEMS.map((e) => e.id);
+  const rooms: ConferenceRoom[] = [];
+  let count = 0;
 
-  for (const standort of STANDORTE) {
-    const namen = RAUM_THEMEN[standort.id] ?? ['Alpha', 'Beta'];
-    namen.forEach((name, i) => {
-      const kapazitaet = kapazitaeten[(lfd + i) % kapazitaeten.length];
-      // Deterministische, gut verteilte Ausstattung pro Raum.
-      const anzahlMerkmale = 3 + ((lfd + i) % 5);
-      const ausstattungIds: string[] = [];
-      for (let m = 0; m < anzahlMerkmale; m++) {
-        const id = ausstattungsPool[(lfd * 3 + i * 2 + m * 5) % ausstattungsPool.length];
-        if (!ausstattungIds.includes(id)) ausstattungIds.push(id);
+  for (const location of LOCATIONS) {
+    const names = ROOM_THEMES[location.id] ?? ['Alpha', 'Beta'];
+    names.forEach((name, i) => {
+      const capacity = capacities[(count + i) % capacities.length];
+      // Deterministic, well-distributed equipment per room.
+      const featureCount = 3 + ((count + i) % 5);
+      const equipmentIds: string[] = [];
+      for (let m = 0; m < featureCount; m++) {
+        const id = equipmentPool[(count * 3 + i * 2 + m * 5) % equipmentPool.length];
+        if (!equipmentIds.includes(id)) equipmentIds.push(id);
       }
-      const etage = (i % 4) + 1;
-      raeume.push({
-        id: `${standort.id}-${name.toLowerCase().replace(/[^a-z]/g, '')}`,
+      const floor = (i % 4) + 1;
+      rooms.push({
+        id: `${location.id}-${name.toLowerCase().replace(/[^a-z]/g, '')}`,
         name,
-        standortId: standort.id,
-        kapazitaet,
-        lage: `${etage}. OG · ${standort.stadt}`,
-        flaecheQm: Math.round(kapazitaet * 2.2 + 6),
-        beschreibung: `Konferenzraum „${name}“ am Standort ${standort.name} – geeignet für bis zu ${kapazitaet} Personen.`,
-        ausstattungIds,
-        farbe: RAUM_FARBEN[lfd % RAUM_FARBEN.length],
+        locationId: location.id,
+        capacity,
+        floorInfo: `Floor ${floor} · ${location.city}`,
+        areaSqm: Math.round(capacity * 2.2 + 6),
+        description: `Conference room "${name}" at ${location.name} – suitable for up to ${capacity} people.`,
+        equipmentIds,
+        color: ROOM_COLORS[count % ROOM_COLORS.length],
       });
-      lfd++;
+      count++;
     });
   }
-  return raeume;
+  return rooms;
 }
 
-export const KONFERENZRAEUME: Konferenzraum[] = baueRaeume();
+export const CONFERENCE_ROOMS: ConferenceRoom[] = buildRooms();
 
-/** Der angemeldete INNOQ-Mitarbeiter (Persona: Alex Berger). */
-export const AKTUELLER_MITARBEITER: Mitarbeiter = {
+/** The currently logged-in INNOQ employee (Persona: Alex Berger). */
+export const CURRENT_EMPLOYEE: Employee = {
   id: 'alex-berger',
   name: 'Alex Berger',
-  rolle: 'Senior Consultant',
-  standortId: 'k',
-  initialen: 'AB',
+  role: 'Senior Consultant',
+  homeLocationId: 'k',
+  initials: 'AB',
 };
 
 /**
- * Vorbelegte Raumbuchungen, damit Verfügbarkeit, Doppelbuchungs-
- * vermeidung und „Meine Buchungen“ direkt erlebbar sind.
+ * Pre-seeded room bookings so that availability, double-booking
+ * prevention, and "My Bookings" can be experienced immediately.
  *
- * Die Daten sind relativ zum Startdatum der App, damit immer
- * aktuelle Buchungen sichtbar sind. Siehe `seedBuchungen()`.
+ * Dates are relative to the app start date so that bookings always
+ * appear current. See `seedBookings()`.
  */
-export function seedBuchungen(heute: Date): Raumbuchung[] {
-  const iso = (offsetTage: number): string => {
-    const d = new Date(heute);
-    d.setDate(d.getDate() + offsetTage);
+export function seedBookings(today: Date): RoomBooking[] {
+  const iso = (offsetDays: number): string => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + offsetDays);
     return d.toISOString().slice(0, 10);
   };
 
   return [
-    // Heute – belegte Zeitfenster für mehrere Räume (Köln).
-    { id: 'b-1001', raumId: 'k-hamilton', standortId: 'k', mitarbeiter: 'Mara Lindqvist', datum: iso(0), startzeit: '09:00', endzeit: '10:30', titel: 'Sprint Planning', status: 'bestaetigt' },
-    { id: 'b-1002', raumId: 'k-hamilton', standortId: 'k', mitarbeiter: 'Jens Brandt', datum: iso(0), startzeit: '13:00', endzeit: '14:00', titel: 'Architektur-Review', status: 'bestaetigt' },
-    { id: 'b-1003', raumId: 'k-engelbart', standortId: 'k', mitarbeiter: 'Alex Berger', datum: iso(0), startzeit: '11:00', endzeit: '12:00', titel: 'Kunden-Workshop Vorbereitung', notiz: 'Beamer benötigt', status: 'bestaetigt' },
-    // Diese Woche – Buchungen des aktuellen Mitarbeiters.
-    { id: 'b-1004', raumId: 'k-cerf', standortId: 'k', mitarbeiter: 'Alex Berger', datum: iso(2), startzeit: '14:00', endzeit: '16:00', titel: 'Team-Retrospektive', status: 'bestaetigt' },
-    { id: 'b-1005', raumId: 'be-neumann', standortId: 'be', mitarbeiter: 'Alex Berger', datum: iso(5), startzeit: '10:00', endzeit: '11:30', titel: 'Kundentermin Acme AG', notiz: 'VC mit Stuttgart', status: 'bestaetigt' },
-    // Weitere fremde Buchungen für Verfügbarkeitsanzeige.
-    { id: 'b-1006', raumId: 'mh-turing', standortId: 'mh', mitarbeiter: 'Sophie Krause', datum: iso(1), startzeit: '09:30', endzeit: '11:00', titel: 'Onboarding', status: 'bestaetigt' },
-    { id: 'b-1007', raumId: 'mh-lovelace', standortId: 'mh', mitarbeiter: 'Tom Vogel', datum: iso(1), startzeit: '15:00', endzeit: '17:00', titel: 'Design Sprint', status: 'bestaetigt' },
-    { id: 'b-1008', raumId: 'hh-torvalds', standortId: 'hh', mitarbeiter: 'Nina Hofmann', datum: iso(3), startzeit: '13:30', endzeit: '15:00', titel: 'Pairing Session', status: 'bestaetigt' },
+    // Today – occupied time slots for several rooms (Köln).
+    { id: 'b-1001', roomId: 'k-hamilton', locationId: 'k', employee: 'Mara Lindqvist', date: iso(0), startTime: '09:00', endTime: '10:30', title: 'Sprint Planning', status: 'confirmed' },
+    { id: 'b-1002', roomId: 'k-hamilton', locationId: 'k', employee: 'Jens Brandt', date: iso(0), startTime: '13:00', endTime: '14:00', title: 'Architecture Review', status: 'confirmed' },
+    { id: 'b-1003', roomId: 'k-engelbart', locationId: 'k', employee: 'Alex Berger', date: iso(0), startTime: '11:00', endTime: '12:00', title: 'Client Workshop Preparation', note: 'Projector needed', status: 'confirmed' },
+    // This week – bookings by the current employee.
+    { id: 'b-1004', roomId: 'k-cerf', locationId: 'k', employee: 'Alex Berger', date: iso(2), startTime: '14:00', endTime: '16:00', title: 'Team Retrospective', status: 'confirmed' },
+    { id: 'b-1005', roomId: 'be-neumann', locationId: 'be', employee: 'Alex Berger', date: iso(5), startTime: '10:00', endTime: '11:30', title: 'Client Meeting Acme AG', note: 'VC with Stuttgart', status: 'confirmed' },
+    // Additional bookings by others for availability display.
+    { id: 'b-1006', roomId: 'mh-turing', locationId: 'mh', employee: 'Sophie Krause', date: iso(1), startTime: '09:30', endTime: '11:00', title: 'Onboarding', status: 'confirmed' },
+    { id: 'b-1007', roomId: 'mh-lovelace', locationId: 'mh', employee: 'Tom Vogel', date: iso(1), startTime: '15:00', endTime: '17:00', title: 'Design Sprint', status: 'confirmed' },
+    { id: 'b-1008', roomId: 'hh-torvalds', locationId: 'hh', employee: 'Nina Hofmann', date: iso(3), startTime: '13:30', endTime: '15:00', title: 'Pairing Session', status: 'confirmed' },
   ];
 }

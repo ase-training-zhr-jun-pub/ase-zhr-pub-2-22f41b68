@@ -1,46 +1,46 @@
 # Backend – Booking Service
 
-## Dokumentation
+## Documentation
 
-| Dokument | Pfad |
+| Document | Path |
 |----------|------|
-| Architektur (arc42) | `docs/arc42/arc42.md` |
+| Architecture (arc42) | `docs/arc42/arc42.md` |
 | ADR-001 Frontend + Booking Service | `docs/arc42/adrs/ADR-001-frontend-prototyp-und-booking-service.md` |
-| ADR-001 Technologie-Stack | `docs/architektur/adrs/ADR-001-technologie-stack-fuer-booking-service.md` |
-| ADR-002 Ressourcendaten als Mock | `docs/architektur/adrs/ADR-002-ressourcendaten-als-mock-in-der-spa.md` |
-| ADR-003 Basic-Auth ohne Passwörter | `docs/architektur/adrs/ADR-003-authentifizierung-basic-auth-ohne-passwoerter.md` |
-| Qualitätsanforderungen | `docs/architektur/qualitätsanforderungen/README.md` |
-| Technische Schulden | `docs/architektur/technische-schulden.md` |
-| Produkt-Backlog | `docs/produkt/backlog/backlog.md` |
-| Glossar (Ubiquitous Language) | `docs/produkt/glossar.md` |
+| ADR-001 Technology Stack | `docs/architektur/adrs/ADR-001-technologie-stack-fuer-booking-service.md` |
+| ADR-002 Resource Data as Mock | `docs/architektur/adrs/ADR-002-ressourcendaten-als-mock-in-der-spa.md` |
+| ADR-003 Basic Auth without Passwords | `docs/architektur/adrs/ADR-003-authentifizierung-basic-auth-ohne-passwoerter.md` |
+| Quality Requirements | `docs/architektur/qualitätsanforderungen/README.md` |
+| Technical Debt | `docs/architektur/technische-schulden.md` |
+| Product Backlog | `docs/produkt/backlog/backlog.md` |
+| Glossary (Ubiquitous Language) | `docs/produkt/glossar.md` |
 
-Halte dich immer an das Wording aus dem Glossar.
+Always follow the wording from the glossary.
 
-## Technologie
+## Technology
 
-- **Java 26 Temurin** (via SDKMAN, gepinnt in `.sdkmanrc`)
-- **Spring Boot 4.1.0** – kein Spring-Parent-POM, stattdessen Spring Boot BOM in `<dependencyManagement>`
-- **Maven Wrapper** (`./mvnw`) – kein globales Maven erforderlich
-- **Spring Web MVC** – REST-API
-- **Spring Actuator** – Health-Endpoint (einziger aktuell aktiver Endpoint)
-- **Spring Boot Testcontainers** – für Integrationstests
-- Datenbank: noch nicht eingebunden; geplant ist **H2** im Dateimodus (Prototyp), später **PostgreSQL** (TS-3)
-- Authentifizierung: noch nicht eingebunden; geplant ist **Basic-Auth ohne Passwörter** (ADR-003, TS-1)
+- **Java 26 Temurin** (via SDKMAN, pinned in `.sdkmanrc`)
+- **Spring Boot 4.1.0** – no Spring parent POM; instead Spring Boot BOM in `<dependencyManagement>`
+- **Maven Wrapper** (`./mvnw`) – no global Maven required
+- **Spring Web MVC** – REST API
+- **Spring Actuator** – health endpoint (only currently active endpoint)
+- **Spring Boot Testcontainers** – for integration tests
+- Database: not yet integrated; planned is **H2** in file mode (prototype), later **PostgreSQL** (TS-3)
+- Authentication: not yet integrated; planned is **Basic Auth without passwords** (ADR-003, TS-1)
 
-## Ordner-Struktur
+## Folder Structure
 
 ```
 backend/
-├── .sdkmanrc                          # Java-Version für SDKMAN
-├── pom.xml                            # Kein Spring-Parent, Spring BOM via dependencyManagement
+├── .sdkmanrc                          # Java version for SDKMAN
+├── pom.xml                            # No Spring parent, Spring BOM via dependencyManagement
 ├── mvnw / mvnw.cmd                    # Maven Wrapper
 └── src/
     ├── main/
     │   ├── java/com/innoq/calvin/booking/
-    │   │   ├── BookingServiceApplication.java   # Einstiegspunkt
-    │   │   └── <feature>/                       # Feature-basiertes Packaging (z. B. booking/, room/)
+    │   │   ├── BookingServiceApplication.java   # Entry point
+    │   │   └── <feature>/                       # Feature-based packaging (e.g. booking/, room/)
     │   └── resources/
-    │       └── application.yml                  # YAML-Konfiguration (kein .properties)
+    │       └── application.yml                  # YAML configuration (no .properties)
     └── test/
         └── java/com/innoq/calvin/booking/
             ├── BookingServiceApplicationTests.java
@@ -48,102 +48,101 @@ backend/
             └── TestcontainersConfiguration.java
 ```
 
-## Architektur
+## Architecture
 
-**Feature-basiertes Packaging** – Code wird nach Fachdomäne gruppiert, nicht nach technischer Schicht.
+**Feature-based packaging** – code is grouped by business domain, not by technical layer.
 
 ```
-com.innoq.calvin.booking.booking/    # Buchungsfeature
-    BookingController.java           # REST-Endpunkte
-    BookingService.java              # Fachlogik
-    Booking.java                     # Domänenobjekt / Entity
-    BookingRepository.java           # Spring Data Repository
+com.innoq.calvin.booking.booking/    # Booking feature
+    BookingController.java           # REST endpoints
+    BookingService.java              # Business logic
+    Booking.java                     # Domain object / entity
+    BookingRepository.java           # Spring Data repository
 ```
 
-Keine tiered Packages wie `controller/`, `service/`, `repository/` auf der obersten Ebene.
+No tiered packages like `controller/`, `service/`, `repository/` at the top level.
 
-**API-Kontext-Pfad:** `/api/v1` (alle Endpunkte und Actuator laufen unter diesem Präfix)  
-**Port:** `8081` (Port 8080 ist durch VS Code / code-server belegt)
+**API context path:** `/api/v1` (all endpoints and Actuator run under this prefix)  
+**Port:** `8081` (port 8080 is occupied by VS Code / code-server)
 
-**Ressourcendaten** (Standorte, Räume, Ausstattung) leben als Mock-Daten im Frontend (ADR-002). Der Booking Service arbeitet ausschließlich mit IDs – er hält und validiert keine Stammdaten.
+**Resource data** (locations, rooms, equipment) live as mock data in the frontend (ADR-002). The Booking Service works exclusively with IDs — it does not hold or validate master data.
 
-**Doppelbuchungsprävention (QA-2, höchste Priorität):** Serverseitige Absicherung über JPA-Transaktionen, Optimistic Locking (`@Version`) und Unique-Constraints auf (Raum-ID, Datum, Zeitfenster).
+**Double-booking prevention (QA-2, highest priority):** Server-side protection via JPA transactions, Optimistic Locking (`@Version`), and unique constraints on (room ID, date, time slot).
 
-## Wichtige Dateien
+## Important Files
 
-| Datei | Zweck |
+| File | Purpose |
 |-------|-------|
-| `pom.xml` | Spring Boot BOM, Abhängigkeiten, `maven.compiler.release=26` |
-| `src/main/resources/application.yml` | Port, Kontext-Pfad, Actuator-Konfiguration |
-| `src/main/java/.../BookingServiceApplication.java` | `@SpringBootApplication` Einstiegspunkt |
-| `.sdkmanrc` | Pinnt `java=26.0.1-tem` für SDKMAN-Auto-Switch |
+| `pom.xml` | Spring Boot BOM, dependencies, `maven.compiler.release=26` |
+| `src/main/resources/application.yml` | Port, context path, Actuator configuration |
+| `src/main/java/.../BookingServiceApplication.java` | `@SpringBootApplication` entry point |
+| `.sdkmanrc` | Pins `java=26.0.1-tem` for SDKMAN auto-switch |
 
-## Wichtige Bash-Commands
+## Important Bash Commands
 
 ```bash
-# Java-Version aktivieren (einmalig pro Shell)
+# Activate Java version (once per shell)
 sdk use java 26.0.1-tem
 
-# Build (im backend/-Verzeichnis)
+# Build (in the backend/ directory)
 ./mvnw clean package -DskipTests
 
-# Starten (Hintergrund, JMX-Stop über Port 9001)
+# Start (background, JMX stop via port 9001)
 ./mvnw spring-boot:start
 
-# Stoppen
+# Stop
 ./mvnw spring-boot:stop
 
-# Tests ausführen
+# Run tests
 ./mvnw test
 
-# Health-Check
+# Health check
 curl http://localhost:8081/api/v1/actuator/health
 ```
 
-> `spring-boot:start` startet die Anwendung als Hintergrundprozess und registriert einen
-> JMX-Stop-Listener auf Port 9001. `spring-boot:stop` beendet diesen Prozess sauber.
+> `spring-boot:start` starts the application as a background process and registers a
+> JMX stop listener on port 9001. `spring-boot:stop` gracefully terminates this process.
 
-## Code Smells – nicht tun
+## Code Smells – Don't Do
 
-- **Tiered Packaging** (`controller/`, `service/`, `repository/` als Top-Level-Pakete) – stattdessen Feature-Packaging
-- **`application.properties`** verwenden – ausschließlich YAML (`application.yml`)
-- **Spring-Boot-Parent-POM** (`<parent><artifactId>spring-boot-starter-parent</artifactId></parent>`) – stattdessen BOM via `<dependencyManagement>`
-- Geschäftslogik in `@RestController` implementieren – gehört in einen `@Service`
-- Stammdaten (Standorte, Räume) im Backend verwalten – sie leben als Mock-Daten in der SPA (ADR-002)
-- Neue Actuator-Endpoints exponieren ohne Absprache – aktuell ist nur `health` aktiv
+- **Tiered packaging** (`controller/`, `service/`, `repository/` as top-level packages) – use feature packaging instead
+- **`application.properties`** – use exclusively YAML (`application.yml`)
+- **Spring Boot parent POM** (`<parent><artifactId>spring-boot-starter-parent</artifactId></parent>`) – use BOM via `<dependencyManagement>` instead
+- Implement business logic in `@RestController` – it belongs in a `@Service`
+- Manage master data (locations, rooms) in the backend – they live as mock data in the SPA (ADR-002)
+- Expose new Actuator endpoints without agreement – currently only `health` is active
 
 ## Run Configurations
 
-### Entwicklung (Vordergrund, mit Live-Reload)
+### Development (foreground, with live reload)
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-### Test / CI (Hintergrund)
+### Test / CI (background)
 
 ```bash
-./mvnw spring-boot:start   # Starten
-./mvnw spring-boot:stop    # Stoppen
+./mvnw spring-boot:start   # Start
+./mvnw spring-boot:stop    # Stop
 ```
 
-### Nur Build
+### Build only
 
 ```bash
 ./mvnw clean package -DskipTests
 ```
 
-## Weitere Hinweise
+## Additional Notes
 
-- **SDKMAN** muss initialisiert sein, damit `sdk` und die gepinnte Java-Version verfügbar sind.
-  In einer neuen Shell: `source "$HOME/.sdkman/bin/sdkman-init.sh"` oder der `.sdkmanrc`-Auto-Switch greift,
-  wenn `sdkman_auto_use=true` in `~/.sdkman/etc/config` gesetzt ist.
-- Der **Stale-Build-Fallstrick**: Wenn `application.properties` und `application.yml` gleichzeitig
-  in `target/classes/` existieren, gewinnt `.properties`. Nach Konfigurationsänderungen immer
-  `./mvnw clean package` statt nur `package`.
-- **Authentifizierung ist noch nicht eingebunden.** Wenn Spring Security hinzugefügt wird,
-  Basic-Auth ohne Passwort-Prüfung gemäß ADR-003 implementieren – der Benutzername bestimmt die
-  Identität, das Passwort wird ignoriert.
-- **H2-Datenbank ist noch nicht eingebunden.** Wenn Persistenz hinzukommt, H2 im Dateimodus
-  konfigurieren (Prototyp). Unique-Constraint auf `(raum_id, datum, start_zeit)` für QA-2
-  ist zwingend.
+- **SDKMAN** must be initialized for `sdk` and the pinned Java version to be available.
+  In a new shell: `source "$HOME/.sdkman/bin/sdkman-init.sh"` or the `.sdkmanrc` auto-switch
+  takes effect when `sdkman_auto_use=true` is set in `~/.sdkman/etc/config`.
+- The **stale build pitfall**: if `application.properties` and `application.yml` both exist in
+  `target/classes/`, `.properties` wins. After configuration changes always run
+  `./mvnw clean package` instead of just `package`.
+- **Authentication is not yet integrated.** When Spring Security is added,
+  implement Basic Auth without password verification per ADR-003 — the username determines
+  the identity, the password is ignored.
+- **H2 database is not yet integrated.** When persistence is added, configure H2 in file mode
+  (prototype). A unique constraint on `(raum_id, datum, start_zeit)` for QA-2 is mandatory.

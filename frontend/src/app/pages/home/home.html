@@ -1,28 +1,28 @@
 <section class="hero">
   <div class="hero__inner clv-shell">
     <div class="hero__text">
-      <p class="eyebrow">INNOQ Raumbuchung</p>
-      <h1>Mühelos den passenden Raum finden und buchen&nbsp;– an jedem INNOQ-Standort.</h1>
+      <p class="eyebrow">INNOQ Room Booking</p>
+      <h1>Effortlessly find and book the right room&nbsp;– at every INNOQ location.</h1>
       <p class="hero__lead">
-        Calvin gibt dir die Sicherheit, dass dein Konferenzraum wirklich verfügbar ist –
-        ob für den Kundenworkshop, das Team-Meeting oder die spontane Besprechung.
+        Calvin gives you the confidence that your conference room is truly available –
+        whether for a client workshop, a team meeting, or a spontaneous discussion.
       </p>
       <div class="hero__actions">
-        <a routerLink="/raeume-finden" class="clv-btn clv-btn--accent">Räume finden</a>
-        <a routerLink="/standorte" class="clv-btn clv-btn--ghost hero__ghost">Standorte ansehen</a>
+        <a routerLink="/find-rooms" class="clv-btn clv-btn--accent">Find Rooms</a>
+        <a routerLink="/locations" class="clv-btn clv-btn--ghost hero__ghost">View Locations</a>
       </div>
     </div>
 
-    @if (naechsteBuchung(); as b) {
+    @if (nextBooking(); as b) {
       <aside class="hero__card">
-        <p class="hero__card-label">Deine nächste Buchung</p>
-        <strong class="hero__card-title">{{ b.titel }}</strong>
+        <p class="hero__card-label">Your Next Booking</p>
+        <strong class="hero__card-title">{{ b.title }}</strong>
         <ul class="hero__card-meta">
-          <li>📍 {{ raumName(b.raumId) }} · {{ standortName(b.standortId) }}</li>
-          <li>📅 {{ formatDatum(b.datum) }}</li>
-          <li>🕒 {{ b.startzeit }}–{{ b.endzeit }} Uhr</li>
+          <li>📍 {{ roomName(b.roomId) }} · {{ locationName(b.locationId) }}</li>
+          <li>📅 {{ formatDate(b.date) }}</li>
+          <li>🕒 {{ b.startTime }}–{{ b.endTime }}</li>
         </ul>
-        <a routerLink="/meine-buchungen" class="hero__card-link">Alle meine Buchungen →</a>
+        <a routerLink="/my-bookings" class="hero__card-link">All my bookings →</a>
       </aside>
     }
   </div>
@@ -31,52 +31,52 @@
 <div class="clv-shell">
   <section class="stats">
     <div class="stat">
-      <span class="stat__num">{{ anzahlStandorte }}</span>
-      <span class="stat__label">Standorte</span>
+      <span class="stat__num">{{ locationCount }}</span>
+      <span class="stat__label">Locations</span>
     </div>
     <div class="stat">
-      <span class="stat__num">{{ anzahlRaeume }}</span>
-      <span class="stat__label">Konferenzräume</span>
+      <span class="stat__num">{{ roomCount }}</span>
+      <span class="stat__label">Conference Rooms</span>
     </div>
     <div class="stat">
-      <span class="stat__num">{{ booking.anzahlMeineBuchungen() }}</span>
-      <span class="stat__label">Meine Buchungen</span>
+      <span class="stat__num">{{ booking.myBookingCount() }}</span>
+      <span class="stat__label">My Bookings</span>
     </div>
     <div class="stat">
       <span class="stat__num">0</span>
-      <span class="stat__label">Doppelbuchungen</span>
+      <span class="stat__label">Double Bookings</span>
     </div>
   </section>
 
   <section class="entry">
-    <h2>Was möchtest du tun?</h2>
+    <h2>What would you like to do?</h2>
     <div class="clv-grid clv-grid--cards">
-      <a routerLink="/raeume-finden" class="clv-card clv-card--link feature">
+      <a routerLink="/find-rooms" class="clv-card clv-card--link feature">
         <div class="clv-card__body">
           <span class="feature__icon">🔍</span>
-          <h3>Räume finden</h3>
-          <p>Standort wählen, nach Kapazität und Ausstattung filtern und den passenden Konferenzraum finden.</p>
+          <h3>Find Rooms</h3>
+          <p>Choose a location, filter by capacity and equipment, and find the right conference room.</p>
         </div>
       </a>
-      <a routerLink="/standorte" class="clv-card clv-card--link feature">
+      <a routerLink="/locations" class="clv-card clv-card--link feature">
         <div class="clv-card__body">
           <span class="feature__icon">🏢</span>
-          <h3>Standorte</h3>
-          <p>Alle acht INNOQ-Standorte in Deutschland und der Schweiz auf einen Blick.</p>
+          <h3>Locations</h3>
+          <p>All eight INNOQ locations in Germany and Switzerland at a glance.</p>
         </div>
       </a>
-      <a routerLink="/meine-buchungen" class="clv-card clv-card--link feature">
+      <a routerLink="/my-bookings" class="clv-card clv-card--link feature">
         <div class="clv-card__body">
           <span class="feature__icon">📅</span>
-          <h3>Meine Buchungen</h3>
-          <p>Behalte den Überblick über deine reservierten Konferenzräume und storniere bei Bedarf.</p>
+          <h3>My Bookings</h3>
+          <p>Keep track of your reserved conference rooms and cancel if needed.</p>
         </div>
       </a>
-      <a routerLink="/arbeitsplaetze" class="clv-card clv-card--link feature feature--soon">
+      <a routerLink="/workplaces" class="clv-card clv-card--link feature feature--soon">
         <div class="clv-card__body">
           <span class="feature__icon">🪑</span>
-          <h3>Arbeitsplätze <span class="clv-badge clv-badge--accent">Bald</span></h3>
-          <p>Die Buchung einzelner Arbeitsplätze ist für eine spätere Phase geplant.</p>
+          <h3>Workplaces <span class="clv-badge clv-badge--accent">Soon</span></h3>
+          <p>Booking individual workplaces is planned for a later phase.</p>
         </div>
       </a>
     </div>

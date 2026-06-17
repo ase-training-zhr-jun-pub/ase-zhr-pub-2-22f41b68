@@ -1,24 +1,24 @@
-/** Hilfsfunktionen zur deutschen Formatierung im Prototyp. */
+/** Utility functions for English date formatting in the prototype. */
 
-const TAG_FORMAT = new Intl.DateTimeFormat('de-DE', {
+const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
   year: 'numeric',
 });
 
-const KURZ_FORMAT = new Intl.DateTimeFormat('de-DE', {
+const SHORT_DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
   day: '2-digit',
   month: '2-digit',
 });
 
-/** "Dienstag, 17. Juni 2026" aus ISO-Datum. */
-export function formatDatum(iso: string): string {
-  return TAG_FORMAT.format(new Date(iso + 'T00:00:00'));
+/** "Tuesday, June 17, 2026" from an ISO date string. */
+export function formatDate(iso: string): string {
+  return DATE_FORMAT.format(new Date(iso + 'T00:00:00'));
 }
 
-/** "Di, 17.06." aus ISO-Datum. */
-export function formatDatumKurz(iso: string): string {
-  return KURZ_FORMAT.format(new Date(iso + 'T00:00:00'));
+/** "Tue, 06/17" from an ISO date string. */
+export function formatDateShort(iso: string): string {
+  return SHORT_DATE_FORMAT.format(new Date(iso + 'T00:00:00'));
 }

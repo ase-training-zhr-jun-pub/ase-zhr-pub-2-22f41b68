@@ -1,19 +1,19 @@
-# Projektstruktur
+# Project Structure
 
 ```text
 agentic-se/
-├── docs/                       # Dokumentation
-│   ├── arc42/                  # Architekturdokumentation
+├── docs/                       # Documentation
+│   ├── arc42/                  # Architecture documentation
 │   │   ├── adrs/               # Architecture Decision Records (ADR)
-│   │   └── arc42.md            # Die Arc42 Dokumentation
-│   ├── produkt/                # Produktdokumentation
-│   │   ├── backlog/            # User Stories und Epics (CLVN-XXX)
-│   │   │   └── backlog.md      # Übersicht über die Priorisierung des aktuellen Backlogs
+│   │   └── arc42.md            # The Arc42 documentation
+│   ├── produkt/                # Product documentation
+│   │   ├── backlog/            # User Stories and Epics (CLVN-XXX)
+│   │   │   └── backlog.md      # Overview of the current backlog prioritization
 │   │   ├── personas/
 │   │   ├── user-journeys/
 │   │   ├── user-story-maps/
 │   └── CLAUDE.md
-├── frontend/                   # React Frontend (noch nicht erstellt)
-├── backend/                    # Backend Projekt (noch nicht erstellt)
-└── scripts/                    # Hilfsskripte
+├── frontend/                   # Angular SPA frontend
+├── backend/                    # Backend project
+└── scripts/                    # Utility scripts
 ```

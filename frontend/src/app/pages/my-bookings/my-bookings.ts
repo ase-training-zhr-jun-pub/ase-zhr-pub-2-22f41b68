@@ -1,0 +1,53 @@
+import { Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CatalogService } from '../../core/catalog.service';
+import { BookingService } from '../../core/booking.service';
+import { RoomBooking } from '../../core/models';
+import { formatDate } from '../../core/format';
+
+/**
+ * "My Bookings" – overview of all own room bookings with
+ * cancellation option (User Story Map: manage bookings).
+ */
+@Component({
+  selector: 'clv-my-bookings',
+  imports: [RouterLink],
+  templateUrl: './my-bookings.html',
+  styleUrl: './my-bookings.scss',
+})
+export class MyBookings {
+  private readonly catalog = inject(CatalogService);
+  protected readonly booking = inject(BookingService);
+
+  protected formatDate = formatDate;
+
+  /** Upcoming bookings from today onwards. */
+  protected readonly upcomingBookings = computed(() =>
+    this.booking.myBookings().filter((b) => b.date >= this.booking.todayIso),
+  );
+
+  /** Past bookings. */
+  protected readonly pastBookings = computed(() =>
+    this.booking.myBookings().filter((b) => b.date < this.booking.todayIso).reverse(),
+  );
+
+  protected tag(iso: string): string {
+    return iso.slice(8, 10);
+  }
+  protected shortMonth(iso: string): string {
+    return new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date(iso + 'T00:00:00'));
+  }
+
+  protected roomName(id: string): string {
+    return this.catalog.getRoom(id)?.name ?? id;
+  }
+  protected locationName(id: string): string {
+    return this.catalog.getLocation(id)?.name ?? id;
+  }
+
+  protected cancelBooking(b: RoomBooking): void {
+    if (confirm(`Really cancel booking "${b.title}" on ${formatDate(b.date)}?`)) {
+      this.booking.cancel(b.id);
+    }
+  }
+}

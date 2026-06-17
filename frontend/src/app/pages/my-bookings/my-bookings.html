@@ -1,0 +1,64 @@
+<div class="clv-shell">
+  <header class="clv-page-head">
+    <p class="eyebrow">Booking Overview</p>
+    <h1>My Bookings</h1>
+    <p class="lead">All conference rooms you've booked – with the certainty that they are reserved for you.</p>
+  </header>
+
+  @if (upcomingBookings().length === 0 && pastBookings().length === 0) {
+    <div class="clv-empty">
+      <span class="icon">📅</span>
+      <h3>No Bookings Yet</h3>
+      <p>You haven't booked any conference rooms yet.</p>
+      <a routerLink="/raeume-finden" class="clv-btn clv-btn--accent clv-btn--sm">Find a Room</a>
+    </div>
+  } @else {
+    @if (upcomingBookings().length > 0) {
+      <h2 class="section-title">Upcoming</h2>
+      <ul class="buchungen">
+        @for (b of upcomingBookings(); track b.id) {
+          <li class="clv-card buchung">
+            <div class="buchung__date">
+              <span class="buchung__day">{{ tag(b.datum) }}</span>
+              <span class="buchung__month">{{ shortMonth(b.datum) }}</span>
+            </div>
+            <div class="buchung__body">
+              <h3>{{ b.titel }}</h3>
+              <p class="buchung__meta">
+                🚪 {{ roomName(b.raumId) }} · 📍 {{ locationName(b.standortId) }}
+              </p>
+              <p class="buchung__when">📅 {{ formatDate(b.datum) }} · 🕒 {{ b.startzeit }}–{{ b.endzeit }}</p>
+              @if (b.notiz) { <p class="buchung__note">📝 {{ b.notiz }}</p> }
+            </div>
+            <div class="buchung__actions">
+              <span class="clv-badge clv-badge--frei">● Confirmed</span>
+              <button type="button" class="clv-btn clv-btn--ghost clv-btn--sm" (click)="cancelBooking(b)">Cancel</button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+
+    @if (pastBookings().length > 0) {
+      <h2 class="section-title section-title--past">Past</h2>
+      <ul class="buchungen">
+        @for (b of pastBookings(); track b.id) {
+          <li class="clv-card buchung buchung--past">
+            <div class="buchung__date">
+              <span class="buchung__day">{{ tag(b.datum) }}</span>
+              <span class="buchung__month">{{ shortMonth(b.datum) }}</span>
+            </div>
+            <div class="buchung__body">
+              <h3>{{ b.titel }}</h3>
+              <p class="buchung__meta">🚪 {{ roomName(b.raumId) }} · 📍 {{ locationName(b.standortId) }}</p>
+              <p class="buchung__when">📅 {{ formatDate(b.datum) }} · 🕒 {{ b.startzeit }}–{{ b.endzeit }}</p>
+            </div>
+            <div class="buchung__actions">
+              <span class="clv-badge clv-badge--neutral">Completed</span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+</div>

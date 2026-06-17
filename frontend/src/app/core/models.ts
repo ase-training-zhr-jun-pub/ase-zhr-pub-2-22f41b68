@@ -1,104 +1,104 @@
 /**
- * Domain-Modell für Calvin.
+ * Domain model for Calvin.
  *
- * Die Begriffe folgen dem Ubiquitous Language aus
- * `docs/produkt/glossar.md`. Jede Entität ist eine eigene Schnittstelle,
- * die Beziehungen werden über IDs abgebildet.
+ * The terms follow the Ubiquitous Language from
+ * `docs/produkt/glossar.md`. Each entity is its own interface;
+ * relationships are expressed via IDs.
  */
 
-/** Länder, in denen INNOQ Standorte betreibt. */
-export type Land = 'Deutschland' | 'Schweiz';
+/** Countries in which INNOQ operates office locations. */
+export type Country = 'Germany' | 'Switzerland';
 
 /**
- * Standort – einer der acht INNOQ-Bürostandorte.
- * (Glossar: „Standort“)
+ * Location – one of the eight INNOQ office locations.
+ * (Glossary: "Standort")
  */
-export interface Standort {
+export interface Location {
   id: string;
   name: string;
-  stadt: string;
-  land: Land;
-  /** Kurzkürzel, z. B. "MH" für Monheim. */
-  kuerzel: string;
-  adresse: string;
-  /** Ist dies der Hauptsitz? */
-  hauptsitz?: boolean;
+  city: string;
+  country: Country;
+  /** Short abbreviation, e.g. "MH" for Monheim. */
+  abbreviation: string;
+  address: string;
+  /** Is this the headquarters? */
+  headquarters?: boolean;
 }
 
 /**
- * Ausstattung – ein technisches oder räumliches Merkmal eines
- * Konferenzraums. (Glossar: „Ausstattung“)
+ * Equipment – a technical or spatial feature of a conference room.
+ * (Glossary: "Ausstattung")
  */
-export interface Ausstattung {
+export interface Equipment {
   id: string;
   name: string;
-  /** Emoji als leichtgewichtiges Icon für den Prototyp. */
+  /** Emoji as a lightweight icon for the prototype. */
   icon: string;
 }
 
 /**
- * Konferenzraum – die zentrale buchbare Ressource in Calvin.
- * (Glossar: „Konferenzraum“)
+ * ConferenceRoom – the central bookable resource in Calvin.
+ * (Glossary: "Konferenzraum")
  */
-export interface Konferenzraum {
+export interface ConferenceRoom {
   id: string;
   name: string;
-  standortId: string;
-  /** Maximale Teilnehmerzahl. */
-  kapazitaet: number;
-  /** Lage des Raums am Standort, z. B. "2. OG, Nordflügel". */
-  lage: string;
-  flaecheQm: number;
-  beschreibung: string;
-  /** IDs der vorhandenen Ausstattungsmerkmale. */
-  ausstattungIds: string[];
-  /** Akzentfarbe für die visuelle Darstellung im Prototyp. */
-  farbe: string;
+  locationId: string;
+  /** Maximum number of participants. */
+  capacity: number;
+  /** Position of the room at the location, e.g. "2nd floor, North wing". */
+  floorInfo: string;
+  areaSqm: number;
+  description: string;
+  /** IDs of the available equipment features. */
+  equipmentIds: string[];
+  /** Accent color for the visual representation in the prototype. */
+  color: string;
 }
 
-/** Status einer Raumbuchung. */
-export type BuchungsStatus = 'bestaetigt' | 'storniert';
+/** Status of a room booking. */
+export type BookingStatus = 'confirmed' | 'cancelled';
 
 /**
- * Raumbuchung – Reservierung eines Konferenzraums für einen
- * Zeitraum und Zweck. (Glossar: „Raumbuchung“)
+ * RoomBooking – a reservation of a conference room for a
+ * time period and purpose. (Glossary: "Raumbuchung")
  */
-export interface Raumbuchung {
+export interface RoomBooking {
   id: string;
-  raumId: string;
-  standortId: string;
-  /** Name des buchenden Mitarbeiters. */
-  mitarbeiter: string;
-  /** Datum im ISO-Format YYYY-MM-DD. */
-  datum: string;
-  /** Startzeit im Format HH:mm. */
-  startzeit: string;
-  /** Endzeit im Format HH:mm. */
-  endzeit: string;
-  titel: string;
-  notiz?: string;
-  status: BuchungsStatus;
+  roomId: string;
+  locationId: string;
+  /** Name of the booking employee. */
+  employee: string;
+  /** Date in ISO format YYYY-MM-DD. */
+  date: string;
+  /** Start time in HH:mm format. */
+  startTime: string;
+  /** End time in HH:mm format. */
+  endTime: string;
+  title: string;
+  note?: string;
+  status: BookingStatus;
 }
 
 /**
- * INNOQ-Mitarbeiter – die primäre Zielgruppe von Calvin.
- * (Glossar: „INNOQ-Mitarbeiter“)
+ * Employee – the primary target group of Calvin.
+ * (Glossary: "INNOQ-Mitarbeiter")
  */
-export interface Mitarbeiter {
+export interface Employee {
   id: string;
   name: string;
-  rolle: string;
-  /** Heimat-Standort des Mitarbeiters. */
-  standortId: string;
-  initialen: string;
+  role: string;
+  /** Home location of the employee. */
+  homeLocationId: string;
+  initials: string;
 }
 
 /**
- * Verfügbarkeitsergebnis für einen Raum in einem konkreten
- * Zeitfenster. (Glossar: „Verfügbarkeit“ / „Verfügbarkeitsanzeige“)
+ * Availability result for a room within a specific time window.
+ * (Glossary: "Verfügbarkeit" / "Verfügbarkeitsanzeige")
  */
-export interface Verfuegbarkeit {
-  verfuegbar: boolean;
-  /** Buchungen, die mit dem angefragten Zeitfenster kollidieren. */
-  konflikte: Raumbuchung[];
+export interface Availability {
+  available: boolean;
+  /** Bookings that conflict with the requested time window. */
+  conflicts: RoomBooking[];
 }

@@ -2,29 +2,34 @@
 paths:
   - frontend/**/*
 ---
-# Frontend Tech-Stack
+# Frontend Tech Stack
 
 ## Stack
 
-- **React 19** mit TypeScript
-- **Vite** als Build-Tool
-- **Tailwind CSS v4** (CSS-only Config via `@theme`, kein `tailwind.config.js`)
-- **ShadCN UI** (base-nova Style) als Komponentenbibliothek
+- **Angular 22** – standalone components, no NgModule
+- **TypeScript 6** – strict configuration (`tsconfig.app.json`)
+- **SCSS** – component-local styling, global design tokens in `src/styles.scss` (CSS Custom Properties)
+- **Angular Router** – client-side routing with lazy-loading per page
+- **Angular Signals** – reactive state (no RxJS for UI state, only for HTTP)
+- **Build:** `@angular/build:application` (esbuild for production, Vite dev server)
+- **Tests:** Vitest + jsdom (no Karma)
+- **Formatter:** Prettier
 
-## Befehle
+## Commands
 
-| Aktion | Befehl |
+| Action | Command |
 |---|---|
-| Dev-Server starten | `cd frontend && npm run dev` |
-| Build erstellen | `cd frontend && npm run build` |
-| ShadCN Komponente hinzufügen | `cd frontend && npx shadcn@latest add <name> --overwrite` |
-| Mehrere Komponenten auf einmal | `cd frontend && npx shadcn@latest add button dialog card --overwrite` |
-| Verfügbare Komponenten anzeigen | `cd frontend && npx shadcn@latest list` |
+| Start dev server | `npm start` |
+| Production build | `npm run build` |
+| Production build + static server (Crucible) | `npm run serve:proxy` |
+| Run tests | `npm test` |
+| Watch build (no server) | `npm run watch` |
 
-## Konventionen
+## Conventions
 
-- **Import-Alias:** `@/` → `frontend/src/` (z.B. `import { Button } from "@/components/ui/button"`)
-- **ShadCN-Komponenten** liegen in `frontend/src/components/ui/`
-- **Eigene Komponenten** liegen in `frontend/src/components/`
-- **Styling:** Tailwind-Klassen verwenden, `cn()` aus `@/lib/utils` zum Zusammenführen von Klassen
-- **Seiten** liegen in `frontend/src/pages/`
+- **Import paths:** use relative paths (no import alias like `@/`)
+- **Page components** live in `src/app/pages/`
+- **Core services** live in `src/app/core/`
+- **Styling:** use CSS Custom Properties from `styles.scss` via `var(--clv-*)`, no literal values
+- **No ShadCN, no Tailwind** – custom SCSS components with `clv-` prefix for shell elements
+- **State management:** Angular Signals — no external state library, no RxJS subjects for UI state

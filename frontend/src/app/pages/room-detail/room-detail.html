@@ -1,0 +1,147 @@
+<div class="clv-shell">
+  @if (!room) {
+    <div class="clv-empty">
+      <span class="icon">🚪</span>
+      <h3>Room Not Found</h3>
+      <p>This conference room does not exist.</p>
+      <a routerLink="/raeume-finden" class="clv-btn clv-btn--ghost clv-btn--sm">Back to Rooms</a>
+    </div>
+  } @else {
+    <a routerLink="/raeume-finden" class="back-link">← Back to Rooms</a>
+
+    <div class="detail">
+      <!-- ============ Left column: Room details (CLVN-006) ============ -->
+      <section class="detail__main">
+        <div class="detail__banner" [style.background]="room.farbe">
+          <span class="detail__kicker">{{ location?.name }} · {{ location?.land }}</span>
+          <h1>{{ room.name }}</h1>
+        </div>
+
+        <div class="detail__facts">
+          <div class="fact">
+            <span class="fact__label">Capacity</span>
+            <span class="fact__value">👥 {{ room.kapazitaet }} People</span>
+          </div>
+          <div class="fact">
+            <span class="fact__label">Location</span>
+            <span class="fact__value">📍 {{ room.lage }}</span>
+          </div>
+          <div class="fact">
+            <span class="fact__label">Area</span>
+            <span class="fact__value">📐 {{ room.flaecheQm }} m²</span>
+          </div>
+        </div>
+
+        <p class="detail__desc">{{ room.beschreibung }}</p>
+
+        <h3>Equipment</h3>
+        <ul class="detail__ausstattung">
+          @for (a of equipment(); track a!.id) {
+            <li class="clv-chip"><span aria-hidden="true">{{ a!.icon }}</span> {{ a!.name }}</li>
+          }
+        </ul>
+
+        <!-- Day occupancy -->
+        <h3 class="detail__belegung-titel">Occupancy on {{ formatDate(date()) }}</h3>
+        @if (dayBookings().length === 0) {
+          <p class="detail__frei-hinweis clv-notice clv-notice--success">
+            This room is completely free on this day.
+          </p>
+        } @else {
+          <ul class="belegung">
+            @for (b of dayBookings(); track b.id) {
+              <li class="belegung__item">
+                <span class="belegung__time">{{ b.startzeit }}–{{ b.endzeit }}</span>
+                <span class="belegung__title">{{ b.titel }}</span>
+                <span class="belegung__by">{{ b.mitarbeiter }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- ============ Right column: Booking ============ -->
+      <aside class="detail__booking">
+        @if (confirmation(); as b) {
+          <!-- Booking confirmation -->
+          <div class="confirm">
+            <span class="confirm__icon">✅</span>
+            <h2>Booking Confirmed</h2>
+            <p class="confirm__sub">The room is reserved for you.</p>
+            <dl class="confirm__details">
+              <div><dt>Room</dt><dd>{{ room.name }} · {{ location?.name }}</dd></div>
+              <div><dt>Title</dt><dd>{{ b.titel }}</dd></div>
+              <div><dt>Date</dt><dd>{{ formatDate(b.datum) }}</dd></div>
+              <div><dt>Time</dt><dd>{{ b.startzeit }}–{{ b.endzeit }}</dd></div>
+              @if (b.notiz) { <div><dt>Note</dt><dd>{{ b.notiz }}</dd></div> }
+            </dl>
+            <div class="confirm__actions">
+              <a routerLink="/meine-buchungen" class="clv-btn clv-btn--primary">Go to My Bookings</a>
+              <button type="button" class="clv-btn clv-btn--ghost" (click)="resetBooking()">New Booking</button>
+            </div>
+          </div>
+        } @else {
+          <form class="booking-form" (ngSubmit)="submitBooking()">
+            <h2>Book Room</h2>
+
+            <div class="clv-field">
+              <label class="clv-label" for="b-datum">Date</label>
+              <input id="b-datum" type="date" class="clv-input" [min]="todayIso"
+                     [ngModel]="date()" (ngModelChange)="date.set($event)" name="datum" />
+            </div>
+
+            <div class="time-row">
+              <div class="clv-field">
+                <label class="clv-label" for="b-start">From</label>
+                <input id="b-start" type="time" step="900" class="clv-input"
+                       [ngModel]="startTime()" (ngModelChange)="startTime.set($event)" name="start" />
+              </div>
+              <div class="clv-field">
+                <label class="clv-label" for="b-ende">To</label>
+                <input id="b-ende" type="time" step="900" class="clv-input"
+                       [ngModel]="endTime()" (ngModelChange)="endTime.set($event)" name="ende" />
+              </div>
+            </div>
+
+            <!-- Live availability -->
+            @if (!timeValid()) {
+              <p class="clv-notice clv-notice--error">End time must be after start time.</p>
+            } @else if (availability().verfuegbar) {
+              <p class="clv-notice clv-notice--success">
+                ✓ Available in the selected time window ({{ startTime() }}–{{ endTime() }}).
+              </p>
+            } @else {
+              <p class="clv-notice clv-notice--error">
+                ✕ Occupied – conflicts with:
+                @for (k of availability().konflikte; track k.id) {
+                  <strong>{{ k.startzeit }}–{{ k.endzeit }} "{{ k.titel }}"</strong>
+                }
+              </p>
+            }
+
+            <div class="clv-field">
+              <label class="clv-label" for="b-titel">Meeting Title</label>
+              <input id="b-titel" type="text" class="clv-input" placeholder="e.g. Team Meeting"
+                     [ngModel]="title()" (ngModelChange)="title.set($event)" name="titel" maxlength="80" />
+            </div>
+
+            <div class="clv-field">
+              <label class="clv-label" for="b-notiz">Note <span class="optional">(optional)</span></label>
+              <textarea id="b-notiz" class="clv-input" rows="2" placeholder="e.g. Projector needed"
+                        [ngModel]="note()" (ngModelChange)="note.set($event)" name="notiz" maxlength="160"></textarea>
+            </div>
+
+            @if (error()) { <p class="clv-notice clv-notice--error">{{ error() }}</p> }
+
+            <button type="submit" class="clv-btn clv-btn--accent booking-form__submit" [disabled]="!canBook()">
+              Submit Booking
+            </button>
+            @if (!title().trim() && timeValid() && availability().verfuegbar) {
+              <p class="booking-form__hint">Please enter a meeting title.</p>
+            }
+          </form>
+        }
+      </aside>
+    </div>
+  }
+</div>

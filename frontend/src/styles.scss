@@ -1,14 +1,14 @@
 /* =========================================================================
-   Calvin – globales Stylesheet
-   INNOQ Corporate Identity (abgeleitet von innoq.com):
-     Primär  Petrol   #004153
-     Akzent  Apricot  #ff9c66
-     Tinte    #242424, Grautöne, Signalfarben
-     Schrift: geometrische Sans (FF Mark) → Helvetica-Neue-Stack
+   Calvin – global stylesheet
+   INNOQ Corporate Identity (derived from innoq.com):
+     Primary  Petrol   #004153
+     Accent   Apricot  #ff9c66
+     Ink      #242424, grey tones, signal colours
+     Typeface: geometric sans (FF Mark) → Helvetica Neue stack
    ========================================================================= */
 
 :root {
-  /* Markenfarben */
+  /* Brand colours */
   --clv-petrol: #004153;
   --clv-petrol-700: #005268;
   --clv-petrol-900: #00303d;
@@ -17,7 +17,7 @@
   --clv-apricot-300: #ffcdb2;
   --clv-apricot-100: #ffe6d9;
 
-  /* Neutrale Töne */
+  /* Neutral tones */
   --clv-ink: #242424;
   --clv-gray-700: #4a4a4b;
   --clv-gray-600: #646465;
@@ -27,24 +27,24 @@
   --clv-gray-100: #f7f7f7;
   --clv-white: #ffffff;
 
-  /* Signalfarben */
+  /* Signal colours */
   --clv-green: #009999;
   --clv-yellow: #fff019;
   --clv-red: #d01040;
   --clv-pink: #ff4d67;
 
-  /* Semantik */
+  /* Semantics */
   --clv-frei: #009999;
   --clv-belegt: #d01040;
 
-  /* Maße */
+  /* Dimensions */
   --clv-radius: 6px;
   --clv-radius-lg: 12px;
   --clv-shell-max: 1200px;
   --clv-shadow-sm: 0 1px 2px rgba(36, 36, 36, 0.06), 0 1px 3px rgba(36, 36, 36, 0.08);
   --clv-shadow-md: 0 4px 14px rgba(0, 65, 83, 0.10);
 
-  /* Typografie */
+  /* Typography */
   --clv-font-sans: 'FFMarkWebPro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --clv-font-serif: 'FreightTextPro', Georgia, 'Times New Roman', serif;
 }
@@ -93,7 +93,7 @@ a {
 }
 a:hover { text-decoration: underline; }
 
-/* ---- Layout-Hilfen --------------------------------------------------- */
+/* ---- Layout helpers --------------------------------------------------- */
 .clv-shell {
   max-width: var(--clv-shell-max);
   margin: 0 auto;
@@ -219,7 +219,7 @@ a.clv-card:hover,
   color: var(--clv-gray-700);
 }
 
-/* ---- Formularelemente ------------------------------------------------ */
+/* ---- Form elements --------------------------------------------------- */
 .clv-field { display: flex; flex-direction: column; gap: 0.4rem; }
 .clv-label { font-size: 0.85rem; font-weight: 700; color: var(--clv-gray-700); }
 .clv-input,
@@ -239,7 +239,7 @@ a.clv-card:hover,
   box-shadow: 0 0 0 3px rgba(0, 65, 83, 0.12);
 }
 
-/* ---- Hinweis-/Leerzustände ------------------------------------------ */
+/* ---- Notice / empty states ------------------------------------------ */
 .clv-empty {
   text-align: center;
   padding: 3rem 1.5rem;

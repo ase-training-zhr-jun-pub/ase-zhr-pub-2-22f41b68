@@ -11,7 +11,7 @@ export interface HealthStatus {
 export class HealthService {
   private readonly http = inject(HttpClient);
 
-  /** Ruft den Spring Actuator Health-Endpunkt auf. */
+  /** Calls the Spring Actuator health endpoint. */
   check(): Observable<HealthStatus> {
     return this.http.get<HealthStatus>('api/v1/actuator/health');
   }

@@ -2,18 +2,19 @@
 paths:
   - frontend/**/*
 ---
-# Frontend-Prototyp Scope
+# Frontend SPA Scope
 
-## Kein Backend
+## No Backend (Prototype Phase)
 
-Der Frontend-Prototyp arbeitet **ohne Backend**. Alle Daten werden im Frontend gemockt.
+The frontend prototype works **without a backend**. All data is mocked in the frontend.
 
-- Mock-Daten in `frontend/src/lib/mock-data.ts` zentralisieren
-- Mock-Daten sollen realistisch sein: echte INNOQ-Standortnamen, plausible Raumnamen, realistische Zeitslots
-- Keine HTTP-Requests an ein Backend — das Backend wird an einem anderen Schulungstag gebaut und angestöpselt
+- Centralize mock data in `frontend/src/app/core/mock-data.ts`
+- Mock data should be realistic: real INNOQ location names, plausible room names, realistic time slots
+- No HTTP requests to a backend — the backend is connected on a separate training day
 
-## SPA mit Routing
+## Angular SPA with Routing
 
-- `react-router-dom` für clientseitiges Routing nutzen
-- URLs sollen sich beim Navigieren aktualisieren
-- Routen in `frontend/src/App.tsx` definieren
+- **Angular Router** with `withHashLocation()` for client-side routing
+- URLs update when navigating (hash-based: `/#/raeume-finden`)
+- Routes defined in `frontend/src/app/app.routes.ts` with lazy-loaded page components
+- All page components live in `frontend/src/app/pages/`

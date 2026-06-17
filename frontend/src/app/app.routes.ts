@@ -1,42 +1,42 @@
 import { Routes } from '@angular/router';
 
 /**
- * Routing entlang der Entitäten aus dem Glossar:
- * Startseite, Standort, Konferenzraum (finden + Detail/Buchung),
- * Raumbuchung („Meine Buchungen“) und Arbeitsplatz (Ausblick).
- * Lazy-Loading je Seite hält das Initial-Bundle klein.
+ * Routes along the entities from the glossary:
+ * Home, Location, ConferenceRoom (find + detail/booking),
+ * RoomBooking ("My Bookings") and Workplace (future scope).
+ * Lazy-loading per page keeps the initial bundle small.
  */
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
-    title: 'Calvin · Raumbuchung bei INNOQ',
+    title: 'Calvin · Room Booking at INNOQ',
   },
   {
-    path: 'standorte',
-    loadComponent: () => import('./pages/standorte/standorte').then((m) => m.Standorte),
-    title: 'Standorte · Calvin',
+    path: 'locations',
+    loadComponent: () => import('./pages/locations/locations').then((m) => m.Locations),
+    title: 'Locations · Calvin',
   },
   {
-    path: 'raeume-finden',
-    loadComponent: () => import('./pages/raeume-finden/raeume-finden').then((m) => m.RaeumeFinden),
-    title: 'Räume finden · Calvin',
+    path: 'find-rooms',
+    loadComponent: () => import('./pages/find-rooms/find-rooms').then((m) => m.FindRooms),
+    title: 'Find Rooms · Calvin',
   },
   {
     path: 'raum/:id',
-    loadComponent: () => import('./pages/raum-detail/raum-detail').then((m) => m.RaumDetail),
-    title: 'Raumdetails · Calvin',
+    loadComponent: () => import('./pages/room-detail/room-detail').then((m) => m.RoomDetail),
+    title: 'Room Details · Calvin',
   },
   {
-    path: 'meine-buchungen',
-    loadComponent: () => import('./pages/meine-buchungen/meine-buchungen').then((m) => m.MeineBuchungen),
-    title: 'Meine Buchungen · Calvin',
+    path: 'my-bookings',
+    loadComponent: () => import('./pages/my-bookings/my-bookings').then((m) => m.MyBookings),
+    title: 'My Bookings · Calvin',
   },
   {
-    path: 'arbeitsplaetze',
-    loadComponent: () => import('./pages/arbeitsplaetze/arbeitsplaetze').then((m) => m.Arbeitsplaetze),
-    title: 'Arbeitsplätze · Calvin',
+    path: 'workplaces',
+    loadComponent: () => import('./pages/workplaces/workplaces').then((m) => m.Workplaces),
+    title: 'Workplaces · Calvin',
   },
   { path: '**', redirectTo: '' },
 ];

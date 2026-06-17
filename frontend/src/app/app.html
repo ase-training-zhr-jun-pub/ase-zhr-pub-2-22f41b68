@@ -1,6 +1,6 @@
 <header class="clv-header">
   <div class="clv-header__inner">
-    <a routerLink="/" class="clv-brand" aria-label="Calvin Startseite">
+    <a routerLink="/" class="clv-brand" aria-label="Calvin Home">
       <span class="clv-brand__mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" width="30" height="30">
           <rect width="32" height="32" rx="6" fill="#004153" />
@@ -13,23 +13,23 @@
       </span>
     </a>
 
-    <nav class="clv-nav" aria-label="Hauptnavigation">
-      <a routerLink="/raeume-finden" routerLinkActive="is-active">Räume finden</a>
-      <a routerLink="/standorte" routerLinkActive="is-active">Standorte</a>
-      <a routerLink="/meine-buchungen" routerLinkActive="is-active">
-        Meine Buchungen
-        @if (booking.anzahlMeineBuchungen() > 0) {
-          <span class="clv-nav__count">{{ booking.anzahlMeineBuchungen() }}</span>
+    <nav class="clv-nav" aria-label="Main Navigation">
+      <a routerLink="/find-rooms" routerLinkActive="is-active">Find Rooms</a>
+      <a routerLink="/locations" routerLinkActive="is-active">Locations</a>
+      <a routerLink="/my-bookings" routerLinkActive="is-active">
+        My Bookings
+        @if (booking.myBookingCount() > 0) {
+          <span class="clv-nav__count">{{ booking.myBookingCount() }}</span>
         }
       </a>
-      <a routerLink="/arbeitsplaetze" routerLinkActive="is-active">Arbeitsplätze</a>
+      <a routerLink="/workplaces" routerLinkActive="is-active">Workplaces</a>
     </nav>
 
-    <div class="clv-user" title="Angemeldeter INNOQ-Mitarbeiter">
-      <span class="clv-user__avatar">{{ mitarbeiter.initialen }}</span>
+    <div class="clv-user" title="Logged-in INNOQ Employee">
+      <span class="clv-user__avatar">{{ employee.initials }}</span>
       <span class="clv-user__meta">
-        <strong>{{ mitarbeiter.name }}</strong>
-        <small>{{ mitarbeiter.rolle }}</small>
+        <strong>{{ employee.name }}</strong>
+        <small>{{ employee.role }}</small>
       </span>
     </div>
   </div>
@@ -41,11 +41,11 @@
 
 <footer class="clv-footer">
   <div class="clv-footer__inner">
-    <span>Calvin · Internes Raumbuchungssystem von INNOQ</span>
+    <span>Calvin · Internal Room Booking System by INNOQ</span>
     @if (backendUp() === true) {
-      <span class="clv-footer__status clv-footer__status--ok">Backend verbunden</span>
+      <span class="clv-footer__status clv-footer__status--ok">Backend connected</span>
     } @else if (backendUp() === false) {
-      <span class="clv-footer__status clv-footer__status--err">Backend nicht erreichbar</span>
+      <span class="clv-footer__status clv-footer__status--err">Backend not reachable</span>
     }
   </div>
 </footer>

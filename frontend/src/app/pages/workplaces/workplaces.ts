@@ -2,36 +2,36 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 /**
- * Arbeitsplatzbuchung – laut Glossar/Produktvision eine geplante
- * Erweiterung für eine spätere Phase. Hier als Ausblick dargestellt.
+ * Workplace booking – according to the Glossary/Product Vision a planned
+ * extension for a later phase. Shown here as an outlook.
  */
 @Component({
-  selector: 'clv-arbeitsplaetze',
+  selector: 'clv-workplaces',
   imports: [RouterLink],
   template: `
     <div class="clv-shell">
       <header class="clv-page-head">
-        <p class="eyebrow">Ausblick</p>
-        <h1>Arbeitsplätze</h1>
+        <p class="eyebrow">Outlook</p>
+        <h1>Workplaces</h1>
         <p class="lead">
-          Die Buchung einzelner Arbeitsplätze ist als zukünftige Erweiterung von Calvin geplant.
+          Booking individual workplaces is planned as a future extension of Calvin.
         </p>
       </header>
 
       <div class="soon clv-card">
         <span class="soon__icon">🪑</span>
-        <h2>Bald verfügbar</h2>
+        <h2>Coming Soon</h2>
         <p>
-          In einer späteren Phase kannst du hier nicht nur Konferenzräume, sondern auch
-          einzelne <strong>Arbeitsplätze</strong> buchen und sehen, welche Kolleg:innen am
-          gleichen Tag im Büro sind.
+          In a later phase you will be able to book not only conference rooms, but also
+          individual <strong>workplaces</strong> and see which colleagues are in the office
+          on the same day.
         </p>
         <ul class="soon__list">
-          <li>🔖 Einzelne Arbeitsplätze reservieren</li>
-          <li>👥 Anwesenheit von Kolleg:innen sehen</li>
-          <li>📞 Telefonboxen für Remote-Calls buchen</li>
+          <li>🔖 Reserve individual workplaces</li>
+          <li>👥 See colleagues' presence</li>
+          <li>📞 Book phone booths for remote calls</li>
         </ul>
-        <a routerLink="/raeume-finden" class="clv-btn clv-btn--accent">Bis dahin: Konferenzraum finden</a>
+        <a routerLink="/raeume-finden" class="clv-btn clv-btn--accent">Until then: Find a Conference Room</a>
       </div>
     </div>
   `,
@@ -59,4 +59,4 @@ import { RouterLink } from '@angular/router';
     `,
   ],
 })
-export class Arbeitsplaetze {}
+export class Workplaces {}

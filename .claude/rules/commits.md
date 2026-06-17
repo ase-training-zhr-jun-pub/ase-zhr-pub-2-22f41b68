@@ -1,3 +1,3 @@
 # Commits
 
-Halte dich an Conventional Commits.
+Follow Conventional Commits.

@@ -1,3 +1,3 @@
-# Nutzung der Dokumentation
+# Using the Documentation
 
-Nutze die Dokumentation unter `docs/` IMMER, wenn du etwas nicht genau weißt.
+Always use the documentation under `docs/` when you're not sure about something.

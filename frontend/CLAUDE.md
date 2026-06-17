@@ -1,225 +1,224 @@
 # Frontend – Calvin SPA
 
-## Dokumentation
+## Documentation
 
-| Dokument | Pfad |
+| Document | Path |
 |----------|------|
-| Architektur (arc42) | `docs/arc42/arc42.md` |
+| Architecture (arc42) | `docs/arc42/arc42.md` |
 | ADR-001 Frontend + Booking Service | `docs/arc42/adrs/ADR-001-frontend-prototyp-und-booking-service.md` |
-| ADR-002 Ressourcendaten als Mock-Daten | `docs/architektur/adrs/ADR-002-ressourcendaten-als-mock-in-der-spa.md` |
-| ADR-003 Basic-Auth ohne Passwörter | `docs/architektur/adrs/ADR-003-authentifizierung-basic-auth-ohne-passwoerter.md` |
-| Qualitätsanforderungen | `docs/architektur/qualitätsanforderungen/README.md` |
-| Technische Schulden | `docs/architektur/technische-schulden.md` |
-| Produkt-Backlog | `docs/produkt/backlog/backlog.md` |
-| Glossar (Ubiquitous Language) | `docs/produkt/glossar.md` |
+| ADR-002 Resource Data as Mock Data | `docs/architektur/adrs/ADR-002-ressourcendaten-als-mock-in-der-spa.md` |
+| ADR-003 Basic Auth without Passwords | `docs/architektur/adrs/ADR-003-authentifizierung-basic-auth-ohne-passwoerter.md` |
+| Quality Requirements | `docs/architektur/qualitätsanforderungen/README.md` |
+| Technical Debt | `docs/architektur/technische-schulden.md` |
+| Product Backlog | `docs/produkt/backlog/backlog.md` |
+| Glossary (Ubiquitous Language) | `docs/produkt/glossar.md` |
 
-Halte dich immer an das Wording aus dem Glossar.
+Always follow the wording from the glossary.
 
-## Technologie
+## Technology
 
-- **Angular 22** – Standalone-Komponenten, kein NgModule
-- **TypeScript 6** – strikte Konfiguration (`tsconfig.app.json`)
-- **SCSS** – komponentenlokales Styling, globale Design-Tokens in `src/styles.scss`
-- **Angular Router** – clientseitiges Routing mit Lazy-Loading per Seite
-- **Angular Signals** – reaktiver State (kein RxJS für UI-State, nur für HTTP)
-- **Build:** `@angular/build:application` (esbuild für Production, Vite Dev-Server)
-- **Tests:** Vitest + jsdom (kein Karma)
+- **Angular 22** – standalone components, no NgModule
+- **TypeScript 6** – strict configuration (`tsconfig.app.json`)
+- **SCSS** – component-local styling, global design tokens in `src/styles.scss`
+- **Angular Router** – client-side routing with lazy-loading per page
+- **Angular Signals** – reactive state (no RxJS for UI state, only for HTTP)
+- **Build:** `@angular/build:application` (esbuild for production, Vite dev server)
+- **Tests:** Vitest + jsdom (no Karma)
 - **Formatter:** Prettier
 
-## Ordner-Struktur
+## Folder Structure
 
 ```
 frontend/
-├── angular.json                        # Build-Konfiguration (baseHref, proxyConfig …)
-├── proxy.conf.json                     # Dev-Server: /api/v1 → localhost:8081
-├── serve-static.mjs                    # Produktions-Staticserver + API-Proxy für Crucible
+├── angular.json                        # Build configuration (baseHref, proxyConfig …)
+├── proxy.conf.json                     # Dev server: /api/v1 → localhost:8081
+├── serve-static.mjs                    # Production static server + API proxy for Crucible
 ├── src/
 │   ├── main.ts                         # Bootstrap
-│   ├── styles.scss                     # Globale CSS Custom Properties (Design-Tokens)
+│   ├── styles.scss                     # Global CSS Custom Properties (design tokens)
 │   └── app/
-│       ├── app.ts                      # Root-Komponente (Shell: Header, Router-Outlet, Footer)
-│       ├── app.html / app.scss         # Shell-Template und -Styles
+│       ├── app.ts                      # Root component (shell: header, router outlet, footer)
+│       ├── app.html / app.scss         # Shell template and styles
 │       ├── app.config.ts               # ApplicationConfig (Router, HttpClient)
-│       ├── app.routes.ts               # Routen-Definition mit Lazy-Loading
+│       ├── app.routes.ts               # Route definitions with lazy-loading
 │       ├── core/
-│       │   ├── models.ts               # Domänen-Interfaces (Ubiquitous Language)
-│       │   ├── mock-data.ts            # Stammdaten und Seed-Buchungen als Mock
-│       │   ├── catalog.service.ts      # Stammdaten-Service (Standorte, Räume, Ausstattung)
-│       │   ├── booking.service.ts      # Buchungs-State (Signals, Verfügbarkeit, Doppelbuchung)
-│       │   ├── health.service.ts       # Backend-Health via Spring Actuator
-│       │   └── format.ts              # Datums-/Zeit-Hilfsfunktionen
+│       │   ├── models.ts               # Domain interfaces (Ubiquitous Language)
+│       │   ├── mock-data.ts            # Master data and seed bookings as mock
+│       │   ├── catalog.service.ts      # Master data service (locations, rooms, equipment)
+│       │   ├── booking.service.ts      # Booking state (signals, availability, double-booking)
+│       │   ├── health.service.ts       # Backend health via Spring Actuator
+│       │   └── format.ts              # Date/time utility functions
 │       └── pages/
-│           ├── home/                   # Startseite
-│           ├── standorte/              # Standortübersicht
-│           ├── raeume-finden/          # Raumsuche mit Filtern
-│           ├── raum-detail/            # Raumdetails + Buchungsmaske
-│           ├── meine-buchungen/        # Buchungsübersicht des Nutzers
-│           └── arbeitsplaetze/         # Platzhalter (noch nicht implementiert)
-└── dist/calvin/browser/               # Produktions-Build (gitignored)
+│           ├── home/                   # Home page
+│           ├── locations/              # Location overview
+│           ├── find-rooms/             # Room search with filters
+│           ├── room-detail/            # Room details + booking form
+│           ├── my-bookings/            # User's booking overview
+│           └── workplaces/             # Placeholder (not yet implemented)
+└── dist/calvin/browser/               # Production build (gitignored)
 ```
 
-## Architektur
+## Architecture
 
-### Standalone-Komponenten
+### Standalone Components
 
-Alle Komponenten sind standalone – kein `NgModule`. Abhängigkeiten werden direkt im
-`imports`-Array der `@Component`-Dekoratoren deklariert.
+All components are standalone – no `NgModule`. Dependencies are declared directly in
+the `imports` array of the `@Component` decorators.
 
-### State-Management mit Signals
+### State Management with Signals
 
-Kein externes State-Management. Reaktiver State über Angular Signals:
+No external state management. Reactive state via Angular Signals:
 
 ```typescript
-// Signal anlegen
+// Create a signal
 readonly backendUp = signal<boolean | null>(null);
 
-// Computed Signal
+// Computed signal
 readonly anzahlMeineBuchungen = computed(() => this.meineBuchungen().length);
 
-// Signal lesen (im Template)
+// Read signal (in template)
 {{ backendUp() }}
 
-// Signal schreiben
+// Write signal
 this.backendUp.set(true);
-this._buchungen.update(liste => [...liste, neueBuchung]);
+this._bookings.update(list => [...list, newBooking]);
 ```
 
 ### Services
 
-Services sind `providedIn: 'root'` und werden per `inject()` eingebunden:
+Services are `providedIn: 'root'` and injected via `inject()`:
 
 ```typescript
 private readonly health = inject(HealthService);
 ```
 
-- **`CatalogService`** – liefert Stammdaten aus `mock-data.ts` (read-only)
-- **`BookingService`** – verwaltet Raumbuchungen im Signal-State (In-Memory, TS-5)
-- **`HealthService`** – HTTP-Aufruf an Spring Actuator für Backend-Verbindungscheck
+- **`CatalogService`** – provides master data from `mock-data.ts` (read-only)
+- **`BookingService`** – manages room bookings in signal state (in-memory, TS-5)
+- **`HealthService`** – HTTP call to Spring Actuator for backend connectivity check
 
-### HTTP-Calls
+### HTTP Calls
 
-HTTP-Client ist mit `withFetch()` konfiguriert. **Alle URLs müssen relativ sein** –
-kein führender Slash:
+The HTTP client is configured with `withFetch()`. **All URLs must be relative** –
+no leading slash:
 
 ```typescript
-// Richtig:
+// Correct:
 this.http.get<HealthStatus>('api/v1/actuator/health')
 
-// Falsch (bricht hinter dem Crucible-Proxy):
+// Wrong (breaks behind the Crucible proxy):
 this.http.get<HealthStatus>('/api/v1/actuator/health')
 ```
 
-Relative URLs funktionieren sowohl hinter dem Crucible-Proxy als auch lokal.
+Relative URLs work both behind the Crucible proxy and locally.
 
 ### Routing
 
-Hash-Routing (`withHashLocation()`) – URLs haben das Format `/#/raeume-finden`.
-Dadurch werden serverseitige Route-Fallbacks überflüssig und die App funktioniert
-korrekt hinter Pfad-Präfix-Proxys (Crucible).
+Hash routing (`withHashLocation()`) – URLs have the format `/#/find-rooms`.
+This eliminates the need for server-side route fallbacks and the app works
+correctly behind path-prefix proxies (Crucible).
 
-Alle Routen laden ihre Seite lazy:
+All routes load their page lazily:
 
 ```typescript
-{ path: 'standorte', loadComponent: () => import('./pages/standorte/standorte').then(m => m.Standorte) }
+{ path: 'locations', loadComponent: () => import('./pages/locations/locations').then(m => m.Locations) }
 ```
 
-### Template-Syntax (Angular 17+)
+### Template Syntax (Angular 17+)
 
-Kontrollfluss mit `@if` / `@for` / `@else` (nicht `*ngIf` / `*ngFor`):
+Control flow with `@if` / `@for` / `@else` (not `*ngIf` / `*ngFor`):
 
 ```html
 @if (backendUp() === true) {
-  <span>Backend verbunden</span>
+  <span>Backend connected</span>
 } @else if (backendUp() === false) {
-  <span>Backend nicht erreichbar</span>
+  <span>Backend not reachable</span>
 }
 
-@for (standort of standorte; track standort.id) {
+@for (location of locations; track standort.id) {
   <li>{{ standort.name }}</li>
 }
 ```
 
-### Mock-Daten und Domänenmodell
+### Mock Data and Domain Model
 
-Stammdaten (Standorte, Räume, Ausstattung) leben in `core/mock-data.ts` – kein
-Resource-Service im Prototyp (ADR-002, TS-2). Der Booking Service arbeitet
-ausschließlich mit IDs dieser Mock-Daten. Domänen-Interfaces in `core/models.ts`
-folgen dem Ubiquitous Language aus dem Glossar.
+Master data (locations, rooms, equipment) live in `core/mock-data.ts` – no
+resource service in the prototype (ADR-002, TS-2). The Booking Service works
+exclusively with IDs of this mock data. Domain interfaces in `core/models.ts`
+follow the Ubiquitous Language from the glossary.
 
-## Wichtige Dateien
+## Important Files
 
-| Datei | Zweck |
+| File | Purpose |
 |-------|-------|
-| `angular.json` | `baseHref: "./"` (kritisch für Crucible), `proxyConfig`, Builder-Konfiguration |
-| `proxy.conf.json` | Leitet `/api/v1/*` im Dev-Server an `localhost:8081` weiter |
-| `serve-static.mjs` | Produktions-Staticserver für Crucible: liefert `dist/` und proxyt `/api/v1/*` |
-| `src/styles.scss` | CSS Custom Properties (Design-Tokens): Farben, Typografie, Schatten, Radii |
-| `src/app/core/models.ts` | Alle Domänen-Interfaces – hier nachschlagen, bevor neue Typen angelegt werden |
-| `src/app/core/mock-data.ts` | Einzige Quelle der Stamm- und Seed-Daten |
+| `angular.json` | `baseHref: "./"` (critical for Crucible), `proxyConfig`, builder configuration |
+| `proxy.conf.json` | Forwards `/api/v1/*` in the dev server to `localhost:8081` |
+| `serve-static.mjs` | Production static server for Crucible: serves `dist/` and proxies `/api/v1/*` |
+| `src/styles.scss` | CSS Custom Properties (design tokens): colors, typography, shadows, radii |
+| `src/app/core/models.ts` | All domain interfaces – look here before creating new types |
+| `src/app/core/mock-data.ts` | Single source of master and seed data |
 
-## Wichtige Bash-Commands
+## Important Bash Commands
 
 ```bash
-# Dev-Server (lokal, Port 4200, mit API-Proxy via proxy.conf.json)
+# Dev server (local, port 4200, with API proxy via proxy.conf.json)
 npm start
 
-# Produktions-Build
+# Production build
 npm run build
 
-# Produktions-Build + Static-Server (für Crucible / Port 4200)
+# Production build + static server (for Crucible / port 4200)
 npm run serve:proxy
 
 # Tests
 npm test
 
-# Build beobachten (watch, kein Server)
+# Watch build (no server)
 npm run watch
 ```
 
-## Crucible-Proxy – kritische Hinweise
+## Crucible Proxy – Critical Notes
 
-Die Crucible-Trainingsumgebung stellt die App unter einem Pfad-Präfix bereit:
+The Crucible training environment serves the app under a path prefix:
 `https://crucible.ch.innoq.io/t/<token>/s/<session>/proxy/4200/`
 
-**Daher:**
+**Therefore:**
 
-1. **`ng serve` funktioniert nicht hinter Crucible.** Vite erzeugt absolute Asset-Pfade
-   (`/main.js`), die den Proxy-Prefix umgehen → 404. Stattdessen immer
-   `npm run serve:proxy` (Produktions-Build + `serve-static.mjs`) verwenden.
+1. **`ng serve` does not work behind Crucible.** Vite generates absolute asset paths
+   (`/main.js`) that bypass the proxy prefix → 404. Always use
+   `npm run serve:proxy` (production build + `serve-static.mjs`) instead.
 
-2. **`baseHref: "./"` in `angular.json` darf nicht entfernt werden.** Nur damit
-   erzeugt esbuild relative `import('./chunk-X.js')`-Pfade statt absoluter.
+2. **`baseHref: "./"` in `angular.json` must not be removed.** Only with it
+   does esbuild generate relative `import('./chunk-X.js')` paths instead of absolute ones.
 
-3. **Hash-Routing (`withHashLocation()`) darf nicht entfernt werden.** Ohne es würde
-   ein direkter Seitenaufruf ein 404 vom Static-Server zurückliefern.
+3. **Hash routing (`withHashLocation()`) must not be removed.** Without it a
+   direct page load would return a 404 from the static server.
 
-4. **HTTP-URLs müssen relativ sein** (kein führender `/`), damit sie den Proxy-Prefix
-   erben.
+4. **HTTP URLs must be relative** (no leading `/`) so they inherit the proxy prefix.
 
-## CSS-Konventionen
+## CSS Conventions
 
-CSS Custom Properties aus `styles.scss` verwenden, keine Literalwerte:
+Use CSS Custom Properties from `styles.scss`, no literal values:
 
 ```scss
-// Richtig:
+// Correct:
 color: var(--clv-petrol);
 border-radius: var(--clv-radius);
 
-// Falsch:
+// Wrong:
 color: #004153;
 border-radius: 6px;
 ```
 
-Komponentenlokale Styles liegen in der jeweiligen `.scss`-Datei. Klassen folgen
-BEM-ähnlichen Namenskonventionen mit `clv-`-Prefix für Shell-Elemente.
+Component-local styles live in the respective `.scss` file. Classes follow
+BEM-like naming conventions with a `clv-` prefix for shell elements.
 
-## Code Smells – nicht tun
+## Code Smells – Don't Do
 
-- **`NgModule`** anlegen – alle Komponenten sind standalone
-- **`*ngIf` / `*ngFor`** verwenden – stattdessen `@if` / `@for`
-- **Konstruktor-Injection** (`constructor(private svc: MyService)`) – stattdessen `inject()`
-- **Absolute HTTP-URLs** (`'/api/v1/...'`) – immer relative URLs (`'api/v1/...'`)
-- **RxJS-Subjects für UI-State** – stattdessen Signals
-- **Neue Stammdaten-Typen** in Komponenten definieren – gehören in `core/models.ts`
-- **Buchungen direkt im Backend erstellen** – der `BookingService` ist noch In-Memory (TS-5); erst nach Backend-Anbindung umstellen
-- **`ng serve` für Crucible** empfehlen – nicht funktionsfähig hinter dem Proxy
+- **`NgModule`** – all components are standalone
+- **`*ngIf` / `*ngFor`** – use `@if` / `@for` instead
+- **Constructor injection** (`constructor(private svc: MyService)`) – use `inject()` instead
+- **Absolute HTTP URLs** (`'/api/v1/...'`) – always use relative URLs (`'api/v1/...'`)
+- **RxJS subjects for UI state** – use Signals instead
+- **Define new master data types in components** – they belong in `core/models.ts`
+- **Create bookings directly in the backend** – `BookingService` is still in-memory (TS-5); switch only after backend integration
+- **Recommend `ng serve` for Crucible** – not functional behind the proxy

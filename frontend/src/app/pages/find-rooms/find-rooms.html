@@ -1,0 +1,135 @@
+<div class="clv-shell">
+  <header class="clv-page-head">
+    <p class="eyebrow">Find Rooms</p>
+    <h1>Find Conference Room</h1>
+    <p class="lead">
+      Select a location and time window. Narrow down rooms by capacity and
+      equipment – Calvin will show you which rooms are available.
+    </p>
+  </header>
+
+  <div class="layout">
+    <!-- ============ Filter bar ============ -->
+    <aside class="filters" aria-label="Filter">
+      <!-- Location (CLVN-002) -->
+      <div class="filter-block">
+        <label class="clv-label" for="location">Location</label>
+        <select id="location" class="clv-select" [ngModel]="locationId()" (ngModelChange)="locationId.set($event)">
+          @for (s of locations; track s.id) {
+            <option [value]="s.id">{{ s.name }} ({{ s.land }})</option>
+          }
+        </select>
+      </div>
+
+      <!-- Time Window -->
+      <div class="filter-block">
+        <span class="clv-label">Time Window</span>
+        <div class="clv-field">
+          <input type="date" class="clv-input" [min]="todayIso" [ngModel]="date()" (ngModelChange)="date.set($event)" aria-label="Date" />
+        </div>
+        <div class="time-row">
+          <div class="clv-field">
+            <span class="time-cap">from</span>
+            <input type="time" class="clv-input" step="900" [ngModel]="startTime()" (ngModelChange)="startTime.set($event)" aria-label="Start time" />
+          </div>
+          <div class="clv-field">
+            <span class="time-cap">to</span>
+            <input type="time" class="clv-input" step="900" [ngModel]="endTime()" (ngModelChange)="endTime.set($event)" aria-label="End time" />
+          </div>
+        </div>
+        @if (!timeWindowValid()) {
+          <p class="filter-hint">End time must be after start time.</p>
+        }
+      </div>
+
+      <!-- Capacity (CLVN-004) -->
+      <div class="filter-block">
+        <label class="clv-label" for="capacity">Min. Capacity (Participants)</label>
+        <input id="capacity" type="number" min="1" max="50" class="clv-input" placeholder="e.g. 6"
+               [ngModel]="minCapacity()" (ngModelChange)="minCapacity.set($event ? +$event : null)" />
+      </div>
+
+      <!-- Equipment (CLVN-005) -->
+      <div class="filter-block">
+        <span class="clv-label">Equipment</span>
+        <div class="ausstattung-list">
+          @for (a of equipment; track a.id) {
+            <button type="button" class="ausstattung-toggle" [class.is-on]="isSelected(a.id)"
+                    (click)="toggleEquipment(a.id)" [attr.aria-pressed]="isSelected(a.id)">
+              <span aria-hidden="true">{{ a.icon }}</span> {{ a.name }}
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (activeFilterCount() > 0) {
+        <button type="button" class="clv-btn clv-btn--ghost clv-btn--sm filter-reset" (click)="resetFilters()">
+          ✕ Reset Filters ({{ activeFilterCount() }})
+        </button>
+      }
+    </aside>
+
+    <!-- ============ Results list (CLVN-003) ============ -->
+    <section class="results">
+      <div class="results__head">
+        <h2>
+          {{ filteredRooms().length }}
+          {{ filteredRooms().length === 1 ? 'Room' : 'Rooms' }}
+          in {{ selectedLocation()?.name }}
+        </h2>
+        @if (timeWindowValid()) {
+          <p class="results__sub">Availability for {{ formatDate(date()) }}, {{ startTime() }}–{{ endTime() }}</p>
+        }
+      </div>
+
+      @if (filteredRooms().length === 0) {
+        <!-- Empty state (AC: clear message) -->
+        <div class="clv-empty">
+          <span class="icon">🔍</span>
+          <h3>No Room Found</h3>
+          <p>
+            At location {{ selectedLocation()?.name }} there is no room matching your filters.
+            Adjust the capacity or equipment.
+          </p>
+          @if (activeFilterCount() > 0) {
+            <button type="button" class="clv-btn clv-btn--ghost clv-btn--sm" (click)="resetFilters()">Reset Filters</button>
+          }
+        </div>
+      } @else {
+        <div class="room-grid">
+          @for (r of filteredRooms(); track r.id) {
+            <a class="clv-card clv-card--link room"
+               [routerLink]="['/raum', r.id]" [queryParams]="detailParams()">
+              <div class="room__banner" [style.background]="r.farbe">
+                <span class="room__cap">👥 {{ r.kapazitaet }}</span>
+                @if (timeWindowValid()) {
+                  @if (isAvailable(r)) {
+                    <span class="clv-badge clv-badge--frei">● Available</span>
+                  } @else {
+                    <span class="clv-badge clv-badge--belegt">● Occupied</span>
+                  }
+                }
+              </div>
+              <div class="clv-card__body">
+                <h3>{{ r.name }}</h3>
+                <p class="room__lage">📍 {{ r.lage }} · {{ r.flaecheQm }} m²</p>
+                <ul class="room__features">
+                  @for (id of r.ausstattungIds; track id) {
+                    <li class="clv-chip" [title]="equipmentName(id)">
+                      <span aria-hidden="true">{{ equipmentIcon(id) }}</span>
+                      <span class="clv-sr-only">{{ equipmentName(id) }}</span>
+                    </li>
+                  }
+                </ul>
+                <div class="room__foot">
+                  <span class="room__bookings">{{ getBookingCountToday(r) }} booking(s) today</span>
+                  <span class="room__cta">Details &amp; book →</span>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

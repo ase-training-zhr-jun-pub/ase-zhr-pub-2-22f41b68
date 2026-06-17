@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# PostToolUse-Hook: formatiert Java-Dateien nach jedem Edit/Write
-# mit spotless-maven-plugin (palantir-java-format, Java-26-kompatibel).
+# PostToolUse hook: formats Java files after each Edit/Write
+# using spotless-maven-plugin (palantir-java-format, Java-26-compatible).
 set -euo pipefail
 
 FILE=$(jq -r '.tool_input.file_path // empty')
@@ -8,7 +8,7 @@ FILE=$(jq -r '.tool_input.file_path // empty')
 
 BACKEND_DIR="${CLAUDE_PROJECT_DIR}/backend"
 
-# JAVA_HOME setzen, damit der Maven Wrapper Java findet (SDKMAN nicht initialisiert).
+# Set JAVA_HOME so the Maven Wrapper can find Java (SDKMAN not initialized in hook shells).
 export JAVA_HOME="$HOME/.sdkman/candidates/java/current"
 export PATH="$JAVA_HOME/bin:$PATH"
 

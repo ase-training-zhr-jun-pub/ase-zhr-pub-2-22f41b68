@@ -1,31 +1,31 @@
-# Betrieb hinter dem Proxy (Crucible / VS Code)
+# Running Behind the Proxy (Crucible / VS Code)
 
-In der Trainings-Umgebung wird die App **nicht** unter `localhost:3000` im Browser
-geöffnet, sondern über einen Proxy unter einem Unterpfad:
+In the training environment the app is **not** opened in the browser at `localhost:3000`
+but via a proxy under a subpath:
 
 ```
 https://crucible.ch.innoq.io/t/<token>/s/<session>/proxy/3000/
 ```
 
-Der konkrete Pfad steht in der Env-Variable `VSCODE_PROXY_URI`
-(z. B. `https://crucible.ch.innoq.io/t/.../s/.../proxy/{{port}}/`).
+The concrete path is available in the env variable `VSCODE_PROXY_URI`
+(e.g. `https://crucible.ch.innoq.io/t/.../s/.../proxy/{{port}}/`).
 
 ## Symptom
 
-Im Browser viele **404** auf `/_next/static/chunks/*.js` (webpack.js, main-app.js,
-page.js …), die Seite bleibt beim Laden hängen.
+Many **404** errors in the browser for `/_next/static/chunks/*.js` (webpack.js, main-app.js,
+page.js …), the page hangs while loading.
 
-## Ursache
+## Cause
 
-Next.js erzeugt standardmäßig **absolute** Asset-Pfade (`/_next/...`). Der Browser
-löst die gegen die nackte Origin auf (`crucible.ch.innoq.io/_next/...`) — also **ohne**
-den `…/proxy/3000/`-Prefix. Der Proxy findet dort nichts → 404. Dasselbe passiert mit
-absoluten `fetch("/api/...")`-Aufrufen.
+Next.js generates **absolute** asset paths by default (`/_next/...`). The browser
+resolves them against the bare origin (`crucible.ch.innoq.io/_next/...`) — i.e. **without**
+the `…/proxy/3000/` prefix. The proxy finds nothing there → 404. The same happens with
+absolute `fetch("/api/...")` calls.
 
 ## Fix
 
-1. **Assets** – in `next.config.mjs` `assetPrefix` aus `VSCODE_PROXY_URI` ableiten
-   (mit Fallback `undefined` für lokal):
+1. **Assets** – derive `assetPrefix` from `VSCODE_PROXY_URI` in `next.config.mjs`
+   (with fallback `undefined` for local):
 
    ```js
    const proxyUri = process.env.VSCODE_PROXY_URI;
@@ -35,21 +35,19 @@ absoluten `fetch("/api/...")`-Aufrufen.
    const nextConfig = { assetPrefix };
    ```
 
-   Damit bekommen Asset-URLs den Proxy-Pfad vorangestellt; der Proxy strippt ihn beim
-   Weiterleiten wieder, sodass die Dateien unter `/_next/...` auf `localhost:3000`
-   gefunden werden.
+   This prepends the proxy path to asset URLs; the proxy strips it again when
+   forwarding, so the files are found under `/_next/...` on `localhost:3000`.
 
-2. **API-Calls** – im Client **relativ** statt absolut fetchen (kein führender Slash):
+2. **API calls** – fetch **relatively** instead of absolutely in the client (no leading slash):
 
    ```js
-   fetch("api/standorte")   // nicht "/api/standorte"
+   fetch("api/standorte")   // not "/api/standorte"
    ```
 
-   Das funktioniert lokal (`localhost:3000/api/standorte`) und hinter dem Proxy
-   (`…/proxy/3000/api/standorte`) gleichermaßen.
+   This works locally (`localhost:3000/api/standorte`) and behind the proxy
+   (`…/proxy/3000/api/standorte`) alike.
 
-3. Nach Änderung an `next.config.mjs` den Dev-Server **neu starten** (`npm run dev`).
+3. After changes to `next.config.mjs`, **restart** the dev server (`npm run dev`).
 
-> Hinweis: `basePath` ist hier **nicht** geeignet, weil der Proxy den Pfad-Prefix beim
-> Weiterleiten entfernt — der Dev-Server würde die Seiten dann unter dem falschen Pfad
-> erwarten und 404 liefern.
+> Note: `basePath` is **not** suitable here, because the proxy strips the path prefix when
+> forwarding — the dev server would then expect the pages under the wrong path and return 404.

@@ -9,7 +9,7 @@
   align-items: start;
 }
 
-/* ---- Hauptspalte ----------------------------------------------------- */
+/* ---- Main column ----------------------------------------------------- */
 .detail__main {
   background: var(--clv-white);
   border: 1px solid var(--clv-gray-300);
@@ -65,7 +65,7 @@
 .belegung__title { font-size: 0.92rem; }
 .belegung__by { font-size: 0.82rem; color: var(--clv-gray-500); }
 
-/* ---- Buchungsspalte -------------------------------------------------- */
+/* ---- Booking column -------------------------------------------------- */
 .detail__booking {
   position: sticky;
   top: 92px;
@@ -83,7 +83,7 @@
 .booking-form__hint { color: var(--clv-gray-500); font-size: 0.8rem; margin: 0; text-align: center; }
 .clv-notice strong { display: block; font-weight: 700; }
 
-/* ---- Bestätigung ----------------------------------------------------- */
+/* ---- Confirmation ---------------------------------------------------- */
 .confirm { text-align: center; }
 .confirm__icon { font-size: 2.5rem; }
 .confirm h2 { margin: 0.25rem 0 0.1rem; }

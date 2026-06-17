@@ -15,7 +15,7 @@ export class App {
   protected readonly booking = inject(BookingService);
   private readonly health = inject(HealthService);
 
-  protected readonly mitarbeiter = this.catalog.aktuellerMitarbeiter;
+  protected readonly employee = this.catalog.currentEmployee;
   protected readonly backendUp = signal<boolean | null>(null);
 
   constructor() {
