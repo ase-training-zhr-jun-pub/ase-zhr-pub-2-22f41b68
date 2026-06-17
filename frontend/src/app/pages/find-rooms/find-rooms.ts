@@ -41,7 +41,7 @@ export class FindRooms {
 
   private initialLocation(): string {
     const fromQuery = this.route.snapshot.queryParamMap.get('location');
-    return fromQuery ?? this.catalog.currentEmployee.locationId;
+    return fromQuery ?? this.catalog.currentEmployee.homeLocationId;
   }
 
   /** Is the time window valid for availability checking? */
@@ -57,9 +57,9 @@ export class FindRooms {
     const features = this.selectedEquipment();
     return this.catalog
       .getRooms(this.locationId())
-      .filter((r) => (min == null || r.kapazitaet >= min))
-      .filter((r) => [...features].every((m) => r.ausstattungIds.includes(m)))
-      .sort((a, b) => a.kapazitaet - b.kapazitaet);
+      .filter((r) => (min == null || r.capacity >= min))
+      .filter((r) => [...features].every((m) => r.equipmentIds.includes(m)))
+      .sort((a, b) => a.capacity - b.capacity);
   });
 
   protected readonly activeFilterCount = computed(
@@ -86,7 +86,7 @@ export class FindRooms {
 
   /* ---- Per-room information --------------------------------------- */
   protected isAvailable(room: ConferenceRoom): boolean {
-    return this.booking.checkAvailability(room.id, this.date(), this.startTime(), this.endTime()).verfuegbar;
+    return this.booking.checkAvailability(room.id, this.date(), this.startTime(), this.endTime()).available;
   }
 
   protected getBookingCountToday(room: ConferenceRoom): number {
@@ -102,6 +102,6 @@ export class FindRooms {
 
   /** Query params to pass the time window to the detail/booking page. */
   protected detailParams(): Record<string, string> {
-    return { datum: this.date(), start: this.startTime(), ende: this.endTime() };
+    return { date: this.date(), start: this.startTime(), end: this.endTime() };
   }
 }

@@ -26,15 +26,15 @@ export class RoomDetail {
 
   private readonly roomId = this.route.snapshot.paramMap.get('id') ?? '';
   protected readonly room = this.catalog.getRoom(this.roomId);
-  protected readonly location = this.room ? this.catalog.getLocation(this.room.standortId) : undefined;
+  protected readonly location = this.room ? this.catalog.getLocation(this.room.locationId) : undefined;
 
   protected readonly todayIso = this.booking.todayIso;
   protected formatDate = formatDate;
 
   /* ---- Form state ---------------------------------------------------- */
-  protected readonly date = signal<string>(this.route.snapshot.queryParamMap.get('datum') ?? this.booking.todayIso);
+  protected readonly date = signal<string>(this.route.snapshot.queryParamMap.get('date') ?? this.booking.todayIso);
   protected readonly startTime = signal<string>(this.route.snapshot.queryParamMap.get('start') ?? '09:00');
-  protected readonly endTime = signal<string>(this.route.snapshot.queryParamMap.get('ende') ?? '10:00');
+  protected readonly endTime = signal<string>(this.route.snapshot.queryParamMap.get('end') ?? '10:00');
   protected readonly title = signal<string>('');
   protected readonly note = signal<string>('');
 
@@ -54,11 +54,11 @@ export class RoomDetail {
   );
 
   protected readonly canBook = computed(
-    () => this.timeValid() && this.availability().verfuegbar && this.title().trim().length > 0,
+    () => this.timeValid() && this.availability().available && this.title().trim().length > 0,
   );
 
   protected equipment() {
-    return (this.room?.ausstattungIds ?? []).map((id) => this.catalog.getEquipmentById(id)).filter(Boolean);
+    return (this.room?.equipmentIds ?? []).map((id) => this.catalog.getEquipmentById(id)).filter(Boolean);
   }
 
   /* ---- Actions ------------------------------------------------------ */
@@ -67,13 +67,13 @@ export class RoomDetail {
     this.error.set(null);
     try {
       const booking = this.booking.bookRoom({
-        raumId: this.room.id,
-        standortId: this.room.standortId,
-        datum: this.date(),
-        startzeit: this.startTime(),
-        endzeit: this.endTime(),
-        titel: this.title().trim(),
-        notiz: this.note().trim() || undefined,
+        roomId: this.room.id,
+        locationId: this.room.locationId,
+        date: this.date(),
+        startTime: this.startTime(),
+        endTime: this.endTime(),
+        title: this.title().trim(),
+        note: this.note().trim() || undefined,
       });
       this.confirmation.set(booking);
     } catch (e) {

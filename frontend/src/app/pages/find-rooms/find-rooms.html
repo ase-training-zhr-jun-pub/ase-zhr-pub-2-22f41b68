@@ -16,7 +16,7 @@
         <label class="clv-label" for="location">Location</label>
         <select id="location" class="clv-select" [ngModel]="locationId()" (ngModelChange)="locationId.set($event)">
           @for (s of locations; track s.id) {
-            <option [value]="s.id">{{ s.name }} ({{ s.land }})</option>
+            <option [value]="s.id">{{ s.name }} ({{ s.country }})</option>
           }
         </select>
       </div>
@@ -99,9 +99,9 @@
         <div class="room-grid">
           @for (r of filteredRooms(); track r.id) {
             <a class="clv-card clv-card--link room"
-               [routerLink]="['/raum', r.id]" [queryParams]="detailParams()">
-              <div class="room__banner" [style.background]="r.farbe">
-                <span class="room__cap">👥 {{ r.kapazitaet }}</span>
+               [routerLink]="['/room', r.id]" [queryParams]="detailParams()">
+              <div class="room__banner" [style.background]="r.color">
+                <span class="room__cap">👥 {{ r.capacity }}</span>
                 @if (timeWindowValid()) {
                   @if (isAvailable(r)) {
                     <span class="clv-badge clv-badge--frei">● Available</span>
@@ -112,9 +112,9 @@
               </div>
               <div class="clv-card__body">
                 <h3>{{ r.name }}</h3>
-                <p class="room__lage">📍 {{ r.lage }} · {{ r.flaecheQm }} m²</p>
+                <p class="room__lage">📍 {{ r.floorInfo }} · {{ r.areaSqm }} m²</p>
                 <ul class="room__features">
-                  @for (id of r.ausstattungIds; track id) {
+                  @for (id of r.equipmentIds; track id) {
                     <li class="clv-chip" [title]="equipmentName(id)">
                       <span aria-hidden="true">{{ equipmentIcon(id) }}</span>
                       <span class="clv-sr-only">{{ equipmentName(id) }}</span>

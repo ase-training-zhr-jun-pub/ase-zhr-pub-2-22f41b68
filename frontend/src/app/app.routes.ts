@@ -24,7 +24,7 @@ export const routes: Routes = [
     title: 'Find Rooms · Calvin',
   },
   {
-    path: 'raum/:id',
+    path: 'room/:id',
     loadComponent: () => import('./pages/room-detail/room-detail').then((m) => m.RoomDetail),
     title: 'Room Details · Calvin',
   },

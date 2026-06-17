@@ -15,8 +15,8 @@ export class Home {
   private readonly catalog = inject(CatalogService);
   protected readonly booking = inject(BookingService);
 
-  protected readonly locationCount = this.catalog.getStandorte().length;
-  protected readonly roomCount = this.catalog.getRaeume().length;
+  protected readonly locationCount = this.catalog.getLocations().length;
+  protected readonly roomCount = this.catalog.getRooms().length;
 
   /** The employee's next upcoming booking (from today onwards). */
   protected readonly nextBooking = computed(() => {

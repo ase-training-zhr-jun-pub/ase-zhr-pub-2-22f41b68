@@ -2,7 +2,7 @@
  * Domain model for Calvin.
  *
  * The terms follow the Ubiquitous Language from
- * `docs/produkt/glossar.md`. Each entity is its own interface;
+ * `docs/product/glossary.md`. Each entity is its own interface;
  * relationships are expressed via IDs.
  */
 
