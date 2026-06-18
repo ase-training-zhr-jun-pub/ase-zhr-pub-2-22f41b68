@@ -7,8 +7,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.innoq.calvin.booking.location.LocationRepository;
+import com.innoq.calvin.booking.room.RoomEntity;
 import com.innoq.calvin.booking.room.RoomRepository;
 import com.innoq.calvin.booking.shared.DoubleBookingException;
+import com.innoq.calvin.booking.shared.ResourceNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -35,7 +37,7 @@ class BookingServiceTest {
 	@InjectMocks
 	BookingService bookingService;
 
-	private static final LocalDate DATE = LocalDate.of(2026, 6, 18);
+	private static final LocalDate DATE = LocalDate.of(2099, 1, 1);
 	private static final String ROOM_ID = "test-room";
 
 	// --- overlap detection via checkAvailability ---
@@ -84,6 +86,7 @@ class BookingServiceTest {
 
 	@Test
 	void create_throws_for_overlapping_booking() {
+		when(roomRepository.findById(ROOM_ID)).thenReturn(Optional.of(room("loc")));
 		BookingEntity existing = bookingEntity("10:00", "11:00");
 		when(bookingRepository.findByRoomIdAndDateAndStatusForUpdate(ROOM_ID, DATE, BookingStatus.CONFIRMED))
 				.thenReturn(List.of(existing));
@@ -96,11 +99,11 @@ class BookingServiceTest {
 
 	@Test
 	void create_succeeds_for_non_overlapping_booking() {
+		when(roomRepository.findById(ROOM_ID)).thenReturn(Optional.of(room("loc")));
 		BookingEntity existing = bookingEntity("09:00", "10:00");
 		when(bookingRepository.findByRoomIdAndDateAndStatusForUpdate(ROOM_ID, DATE, BookingStatus.CONFIRMED))
 				.thenReturn(List.of(existing));
 		when(bookingRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
-		when(roomRepository.findById(any())).thenReturn(Optional.empty());
 		when(locationRepository.findById(any())).thenReturn(Optional.empty());
 		when(bookingMapper.toResponse(any(), any(), any())).thenReturn(bookingResponse("10:00", "11:00"));
 
@@ -111,11 +114,45 @@ class BookingServiceTest {
 	}
 
 	@Test
+	void create_throws_when_room_location_does_not_match() {
+		when(roomRepository.findById(ROOM_ID)).thenReturn(Optional.of(room("other-loc")));
+
+		BookingRequest request = new BookingRequest(ROOM_ID, "loc", DATE, LocalTime.of(10, 0), LocalTime.of(11, 0),
+				"Title", null);
+
+		assertThatThrownBy(() -> bookingService.create(request)).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
 	void create_throws_for_invalid_time_window() {
 		BookingRequest request = new BookingRequest(ROOM_ID, "loc", DATE, LocalTime.of(11, 0), LocalTime.of(10, 0),
 				"Title", null);
 
 		assertThatThrownBy(() -> bookingService.create(request)).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	// --- cancel ---
+
+	@Test
+	void cancel_sets_status_to_cancelled() {
+		BookingEntity entity = bookingEntity("10:00", "11:00");
+		entity.setEmployee("alex-berger");
+		when(bookingRepository.findById("b-existing")).thenReturn(Optional.of(entity));
+		when(bookingRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+		bookingService.cancel("b-existing");
+
+		assertThat(entity.getStatus()).isEqualTo(BookingStatus.CANCELLED);
+	}
+
+	@Test
+	void cancel_throws_for_booking_owned_by_another_employee() {
+		BookingEntity entity = bookingEntity("10:00", "11:00");
+		// entity.employee = "emp", not "alex-berger"
+		when(bookingRepository.findById("b-existing")).thenReturn(Optional.of(entity));
+
+		assertThatThrownBy(() -> bookingService.cancel("b-existing"))
+				.isInstanceOf(ResourceNotFoundException.class);
 	}
 
 	// --- helpers ---
@@ -132,6 +169,13 @@ class BookingServiceTest {
 		b.setTitle("Existing");
 		b.setStatus(BookingStatus.CONFIRMED);
 		return b;
+	}
+
+	private RoomEntity room(String locationId) {
+		RoomEntity r = new RoomEntity();
+		r.setId(ROOM_ID);
+		r.setLocationId(locationId);
+		return r;
 	}
 
 	private BookingResponse bookingResponse(String start, String end) {

@@ -113,6 +113,17 @@
 .room__bookings { color: var(--clv-gray-500); font-size: 0.8rem; }
 .room__cta { color: var(--clv-petrol); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
 
+/* ---- Error banner ---------------------------------------------------- */
+.clv-error {
+  color: var(--clv-red);
+  background: color-mix(in srgb, var(--clv-red) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--clv-red) 30%, transparent);
+  border-radius: var(--clv-radius);
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
 /* ---- Room selection (CLVN-016) --------------------------------------- */
 .room--selected {
   border: 2px solid var(--clv-petrol) !important;

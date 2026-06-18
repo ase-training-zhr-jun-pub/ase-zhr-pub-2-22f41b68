@@ -82,6 +82,13 @@
         }
       </div>
 
+      @if (roomsError()) {
+        <p class="clv-error">{{ roomsError() }}</p>
+      }
+      @if (dayBookingsError()) {
+        <p class="clv-error">{{ dayBookingsError() }}</p>
+      }
+
       @if (filteredRooms().length === 0) {
         <!-- Empty state (AC: clear message) -->
         <div class="clv-empty">
@@ -126,7 +133,7 @@
                     </li>
                   }
                 </ul>
-                @let bookings = getBookingsForRoom(r);
+                @let bookings = bookingsByRoomId().get(r.id) ?? [];
                 @if (bookings.length > 0) {
                   <ul class="room__booking-list" aria-label="Bookings today">
                     @for (b of bookings; track b.id) {

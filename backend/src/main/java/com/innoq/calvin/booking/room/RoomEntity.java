@@ -41,6 +41,7 @@ public class RoomEntity {
 
 	private String color;
 
+	// EAGER: acceptable for prototype; switch to LAZY with explicit JOIN FETCH before scaling
 	@ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
 	@CollectionTable(name = "room_equipment", joinColumns = @JoinColumn(name = "room_id"))
 	@Column(name = "equipment_id")

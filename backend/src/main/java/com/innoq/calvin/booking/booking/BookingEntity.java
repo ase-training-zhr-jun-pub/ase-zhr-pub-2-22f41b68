@@ -10,6 +10,7 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,7 @@ public class BookingEntity {
 	private String id;
 
 	@Version
+	@Setter(AccessLevel.NONE)
 	private long version;
 
 	@Column(name = "room_id", nullable = false)

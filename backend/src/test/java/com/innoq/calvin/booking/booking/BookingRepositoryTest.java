@@ -17,7 +17,7 @@ class BookingRepositoryTest {
 	@Autowired
 	BookingRepository bookingRepository;
 
-	private static final LocalDate DATE = LocalDate.of(2026, 6, 18);
+	private static final LocalDate DATE = LocalDate.of(2099, 1, 1);
 	private static final String ROOM_ID = "test-room-repo";
 
 	@Test

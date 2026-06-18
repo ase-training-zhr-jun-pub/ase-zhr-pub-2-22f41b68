@@ -37,29 +37,34 @@ public class BookingService {
 		this.bookingMapper = bookingMapper;
 	}
 
+	@Transactional(readOnly = true)
 	public List<BookingResponse> findMyBookings() {
 		List<BookingEntity> bookings = bookingRepository
 				.findByEmployeeAndStatusOrderByDateAscStartTimeAsc(CURRENT_EMPLOYEE, BookingStatus.CONFIRMED);
 		return toResponseList(bookings);
 	}
 
+	@Transactional(readOnly = true)
 	public List<BookingResponse> findByRoomAndDate(String roomId, LocalDate date) {
 		List<BookingEntity> bookings = bookingRepository.findByRoomIdAndDateAndStatusOrderByStartTimeAsc(roomId, date,
 				BookingStatus.CONFIRMED);
 		return toResponseList(bookings);
 	}
 
+	@Transactional(readOnly = true)
 	public List<BookingResponse> findByLocationAndDate(String locationId, LocalDate date) {
 		List<BookingEntity> bookings = bookingRepository.findByLocationIdAndDateAndStatus(locationId, date,
 				BookingStatus.CONFIRMED);
 		return toResponseList(bookings);
 	}
 
+	@Transactional(readOnly = true)
 	public BookingResponse findById(String id) {
 		return bookingRepository.findById(id).map(this::toResponse)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
 	}
 
+	@Transactional(readOnly = true)
 	public AvailabilityResponse checkAvailability(String roomId, LocalDate date, LocalTime startTime,
 			LocalTime endTime) {
 		List<BookingEntity> dayBookings = bookingRepository.findByRoomIdAndDateAndStatus(roomId, date,
@@ -73,6 +78,13 @@ public class BookingService {
 	public BookingResponse create(BookingRequest request) {
 		if (!request.endTime().isAfter(request.startTime())) {
 			throw new IllegalArgumentException("End time must be after start time");
+		}
+
+		RoomEntity room = roomRepository.findById(request.roomId())
+				.orElseThrow(() -> new ResourceNotFoundException("Room not found: " + request.roomId()));
+		if (!room.getLocationId().equals(request.locationId())) {
+			throw new IllegalArgumentException(
+					"Room " + request.roomId() + " does not belong to location " + request.locationId());
 		}
 
 		List<BookingEntity> dayBookings = bookingRepository.findByRoomIdAndDateAndStatusForUpdate(request.roomId(),
@@ -106,6 +118,9 @@ public class BookingService {
 	public void cancel(String id) {
 		BookingEntity entity = bookingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + id));
+		if (!entity.getEmployee().equals(CURRENT_EMPLOYEE)) {
+			throw new ResourceNotFoundException("Booking not found: " + id);
+		}
 		entity.setStatus(BookingStatus.CANCELLED);
 		bookingRepository.save(entity);
 	}

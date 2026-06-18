@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-i
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
-import { catchError, shareReplay, switchMap } from 'rxjs/operators';
+import { catchError, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { CatalogService } from '../../core/catalog.service';
 import { BookingService } from '../../core/booking.service';
 import { ConferenceRoom, RoomBooking } from '../../core/models';
@@ -44,6 +44,9 @@ export class FindRooms {
   protected readonly todayIso = this.booking.todayIso;
   protected formatDate = formatDate;
 
+  protected readonly roomsError = signal<string | null>(null);
+  protected readonly dayBookingsError = signal<string | null>(null);
+
   constructor() {
     // Update default location from employee's home location once loaded
     const fromQuery = this.route.snapshot.queryParamMap.get('location');
@@ -56,14 +59,30 @@ export class FindRooms {
 
   /** Rooms at the selected location, updated whenever locationId changes. */
   private readonly allRooms$ = toObservable(this.locationId).pipe(
-    switchMap((id) => this.catalog.getRooms(id).pipe(catchError(() => of([])))),
+    switchMap((id) =>
+      this.catalog.getRooms(id).pipe(
+        tap(() => this.roomsError.set(null)),
+        catchError(() => {
+          this.roomsError.set('Failed to load rooms. Please try again.');
+          return of([]);
+        }),
+      ),
+    ),
     shareReplay(1),
   );
   private readonly allRooms = toSignal(this.allRooms$, { initialValue: [] });
 
   /** All confirmed bookings at the selected location for the selected date. */
   private readonly dayBookings$ = combineLatest([toObservable(this.locationId), toObservable(this.date)]).pipe(
-    switchMap(([loc, d]) => this.booking.bookingsByLocationAndDate(loc, d).pipe(catchError(() => of([])))),
+    switchMap(([loc, d]) =>
+      this.booking.bookingsByLocationAndDate(loc, d).pipe(
+        tap(() => this.dayBookingsError.set(null)),
+        catchError(() => {
+          this.dayBookingsError.set('Failed to load bookings for this day. Please try again.');
+          return of([] as RoomBooking[]);
+        }),
+      ),
+    ),
     shareReplay(1),
   );
   private readonly dayBookings = toSignal(this.dayBookings$, { initialValue: [] as RoomBooking[] });
@@ -126,7 +145,7 @@ export class FindRooms {
   }
 
   /** Bookings grouped by roomId, sorted by startTime — computed once per dayBookings change. */
-  private readonly bookingsByRoomId = computed<Map<string, RoomBooking[]>>(() => {
+  protected readonly bookingsByRoomId = computed<Map<string, RoomBooking[]>>(() => {
     const map = new Map<string, RoomBooking[]>();
     for (const b of this.dayBookings()) {
       const list = map.get(b.roomId) ?? [];
@@ -144,11 +163,8 @@ export class FindRooms {
     if (!this.timeWindowValid()) return true;
     const start = this.startTime();
     const end = this.endTime();
+    // Lexicographic comparison is valid: backend guarantees HH:mm zero-padding via @JsonFormat(pattern = "HH:mm")
     return !(this.bookingsByRoomId().get(room.id) ?? []).some((b) => b.startTime < end && b.endTime > start);
-  }
-
-  protected getBookingsForRoom(room: ConferenceRoom): RoomBooking[] {
-    return this.bookingsByRoomId().get(room.id) ?? [];
   }
 
   protected equipmentIcon(id: string): string {
