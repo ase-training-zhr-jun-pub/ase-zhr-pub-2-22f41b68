@@ -132,10 +132,6 @@ export class FindRooms {
     return !this.dayBookings().some((b) => b.roomId === room.id && b.startTime < end && b.endTime > start);
   }
 
-  protected getBookingCountToday(room: ConferenceRoom): number {
-    return this.dayBookings().filter((b) => b.roomId === room.id).length;
-  }
-
   protected getBookingsForRoom(room: ConferenceRoom): RoomBooking[] {
     return this.dayBookings()
       .filter((b) => b.roomId === room.id)

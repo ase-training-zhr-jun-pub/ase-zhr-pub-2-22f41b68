@@ -104,16 +104,19 @@
             </div>
 
             <!-- Live availability -->
+            @let avail = availability();
             @if (!timeValid()) {
               <p class="clv-notice clv-notice--error">End time must be after start time.</p>
-            } @else if (availability().available) {
+            } @else if (avail === null) {
+              <p class="clv-notice">Checking availability…</p>
+            } @else if (avail.available) {
               <p class="clv-notice clv-notice--success">
                 ✓ Available in the selected time window ({{ startTime() }}–{{ endTime() }}).
               </p>
             } @else {
               <p class="clv-notice clv-notice--error">
                 ✕ Occupied – conflicts with:
-                @for (k of availability().conflicts; track k.id) {
+                @for (k of avail.conflicts; track k.id) {
                   <strong>{{ k.startTime }}–{{ k.endTime }} "{{ k.title }}"</strong>
                 }
               </p>
@@ -136,7 +139,7 @@
             <button type="submit" class="clv-btn clv-btn--accent booking-form__submit" [disabled]="!canBook()">
               Submit Booking
             </button>
-            @if (!title().trim() && timeValid() && availability().available) {
+            @if (!title().trim() && timeValid() && avail?.available) {
               <p class="booking-form__hint">Please enter a meeting title.</p>
             }
           </form>

@@ -3,7 +3,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
-import { catchError, debounceTime, filter, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, startWith, switchMap } from 'rxjs/operators';
 import { CatalogService } from '../../core/catalog.service';
 import { BookingService } from '../../core/booking.service';
 import { Availability, RoomBooking } from '../../core/models';
@@ -70,17 +70,18 @@ export class RoomDetail {
       debounceTime(200),
       switchMap(([d, s, e]) =>
         this.booking.checkAvailability(this.roomId, d, s, e).pipe(
-          catchError(() => of<Availability>({ available: true, conflicts: [] })),
+          startWith(null),
+          catchError(() => of<Availability>({ available: false, conflicts: [] })),
         ),
       ),
     ),
-    { initialValue: { available: true, conflicts: [] } as Availability },
+    { initialValue: null as Availability | null },
   );
 
   protected readonly timeValid = computed(() => this.startTime() < this.endTime());
 
   protected readonly canBook = computed(
-    () => this.timeValid() && this.availability().available && this.title().trim().length > 0,
+    () => this.timeValid() && this.availability()?.available === true && this.title().trim().length > 0,
   );
 
   protected equipment() {

@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookingService {
 
+	// TODO(TS-1): replace with authenticated principal once Basic Auth is
+	// integrated
 	private static final String CURRENT_EMPLOYEE = "alex-berger";
 
 	private final BookingRepository bookingRepository;
@@ -60,12 +63,13 @@ public class BookingService {
 		return new AvailabilityResponse(conflicts.isEmpty(), conflicts);
 	}
 
+	@Transactional
 	public BookingResponse create(BookingRequest request) {
 		if (!request.endTime().isAfter(request.startTime())) {
 			throw new IllegalArgumentException("End time must be after start time");
 		}
 
-		List<BookingEntity> dayBookings = bookingRepository.findByRoomIdAndDateAndStatus(request.roomId(),
+		List<BookingEntity> dayBookings = bookingRepository.findByRoomIdAndDateAndStatusForUpdate(request.roomId(),
 				request.date(), BookingStatus.CONFIRMED);
 		boolean hasConflict = dayBookings.stream()
 				.anyMatch(b -> overlaps(b.getStartTime(), b.getEndTime(), request.startTime(), request.endTime()));

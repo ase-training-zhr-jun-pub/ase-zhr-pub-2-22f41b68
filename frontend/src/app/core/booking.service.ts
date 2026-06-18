@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -44,7 +45,7 @@ export class BookingService {
   }
 
   constructor() {
-    this.http.get<RoomBooking[]>('api/v1/bookings').subscribe((bookings) => {
+    this.http.get<RoomBooking[]>('api/v1/bookings').pipe(takeUntilDestroyed()).subscribe((bookings) => {
       this._bookings.set(bookings);
     });
   }
