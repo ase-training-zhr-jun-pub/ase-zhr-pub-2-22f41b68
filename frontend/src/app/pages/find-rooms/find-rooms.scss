@@ -74,6 +74,35 @@
 .room__lage { color: var(--clv-gray-600); font-size: 0.88rem; margin-bottom: 0.75rem; }
 .room__features { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0; margin: 0 0 1rem; }
 .room__features .clv-chip { padding: 0.25rem 0.45rem; font-size: 0.95rem; }
+.room__booking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.room__booking-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--clv-gray-600);
+  overflow: hidden;
+}
+.room__booking-time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--clv-gray-700);
+  flex-shrink: 0;
+}
+.room__booking-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .room__foot {
   display: flex;
   align-items: center;

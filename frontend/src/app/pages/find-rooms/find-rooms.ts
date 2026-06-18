@@ -136,6 +136,12 @@ export class FindRooms {
     return this.dayBookings().filter((b) => b.roomId === room.id).length;
   }
 
+  protected getBookingsForRoom(room: ConferenceRoom): RoomBooking[] {
+    return this.dayBookings()
+      .filter((b) => b.roomId === room.id)
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  }
+
   protected equipmentIcon(id: string): string {
     return this.equipment().find((e) => e.id === id)?.icon ?? '•';
   }

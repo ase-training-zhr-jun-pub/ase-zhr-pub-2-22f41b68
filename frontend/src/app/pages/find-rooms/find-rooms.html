@@ -126,6 +126,16 @@
                     </li>
                   }
                 </ul>
+                @if (getBookingsForRoom(r).length > 0) {
+                  <ul class="room__booking-list" aria-label="Bookings today">
+                    @for (b of getBookingsForRoom(r); track b.id) {
+                      <li class="room__booking-item">
+                        <span class="room__booking-time">{{ b.startTime }}–{{ b.endTime }}</span>
+                        <span class="room__booking-title">{{ b.title }}</span>
+                      </li>
+                    }
+                  </ul>
+                }
                 <div class="room__foot">
                   <span class="room__bookings">{{ getBookingCountToday(r) }} booking(s) today</span>
                   <span class="room__cta">Select →</span>
